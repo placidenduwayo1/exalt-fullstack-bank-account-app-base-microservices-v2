@@ -1,9 +1,9 @@
 create table if not exists roles_table
 (
-    id
+    role_id
     BIGINT
     PRIMARY
-    KEY,
+    KEY AUTO_INCREMENT,
     role_name
     VARCHAR
 (
@@ -16,10 +16,10 @@ create table if not exists roles_table
     );
 create table if not exists users_table
 (
-    id
+    user_id
     BIGINT
     PRIMARY
-    KEY,
+    KEY AUTO_INCREMENT,
     username
     VARCHAR
 (

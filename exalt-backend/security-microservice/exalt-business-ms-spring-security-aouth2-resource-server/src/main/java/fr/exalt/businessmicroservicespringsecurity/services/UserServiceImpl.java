@@ -1,12 +1,12 @@
 package fr.exalt.businessmicroservicespringsecurity.services;
 
+import fr.exalt.businessmicroservicespringsecurity.entities.dtos.RoleDto;
+import fr.exalt.businessmicroservicespringsecurity.entities.dtos.UserDto;
 import fr.exalt.businessmicroservicespringsecurity.entities.dtos.UserRoleDto;
 import fr.exalt.businessmicroservicespringsecurity.entities.dtos.UserUpdateDto;
 import fr.exalt.businessmicroservicespringsecurity.entities.models.Role;
 import fr.exalt.businessmicroservicespringsecurity.entities.models.User;
 import fr.exalt.businessmicroservicespringsecurity.exceptions.*;
-import fr.exalt.businessmicroservicespringsecurity.entities.dtos.RoleDto;
-import fr.exalt.businessmicroservicespringsecurity.entities.dtos.UserDto;
 import fr.exalt.businessmicroservicespringsecurity.repositories.RoleRepository;
 import fr.exalt.businessmicroservicespringsecurity.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
         mappedUser.setCreatedAt(Instant.now().toString());
         mappedUser.setUsername(username);
         mappedUser.setPwd(passwordEncoder.encode(userDto.getPwd()));
+        mappedUser.setUserId(1L);
         return userRepository.save(mappedUser);
     }
 

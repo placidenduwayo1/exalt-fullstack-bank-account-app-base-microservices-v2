@@ -31,5 +31,4 @@ eureka:
       defaultZone: ${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
 
 server:
-  address: localhost
-  port: 8102
+  port: ${SERVER_PORT}

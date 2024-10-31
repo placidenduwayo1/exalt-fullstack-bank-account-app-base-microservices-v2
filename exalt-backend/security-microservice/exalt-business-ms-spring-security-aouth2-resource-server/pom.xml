@@ -18,6 +18,7 @@
         <spring-cloud.version>2023.0.1</spring-cloud.version>
         <maven.test.skip>true</maven.test.skip>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <bcpkix-jdk18on.version>1.76</bcpkix-jdk18on.version>
     </properties>
     <dependencies>
         <dependency>
@@ -70,7 +71,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk18on</artifactId>
-            <version>1.76</version>
+            <version>${bcpkix-jdk18on.version}</version>
         </dependency>
 
         <dependency>

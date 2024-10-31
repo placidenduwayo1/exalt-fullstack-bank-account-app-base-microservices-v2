@@ -13,10 +13,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "users_table")
+@ToString
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     @Column(unique = true)
     private String username;
@@ -27,9 +27,6 @@ public class User {
     private String email;
     @Column(name = "created_date")
     private String createdAt;
-    @ManyToMany @JoinTable(
-            name = "users_roles_association_table",
-            joinColumns = {@JoinColumn(name = "user_Id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 }

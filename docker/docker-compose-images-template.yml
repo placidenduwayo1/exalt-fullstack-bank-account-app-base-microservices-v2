@@ -1,4 +1,5 @@
 services:
+
   bank-account-app-apis-dbs:
     image: mysql:8.0
     container_name: ${DATABASE_HOST}
@@ -213,35 +214,36 @@ services:
       SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
 
 #  ## spring security microservice
-#  exalt-business-ms-spring-security-aouth2-res-server:
-#    image: placidenduwayo1/exalt-business-ms-spring-security-aouth2-res-server:1.0.0
-#    container_name: ${APPLICATION_NAME4}
-#    build:
-#      context: ./exalt-backend/security-microservice/${APPLICATION_NAME4}
-#      dockerfile: Dockerfile
-#    ports:
-#      - 8102:8102
-#    depends_on:
-#      exalt-microservices-registration-server:
-#        condition: service_healthy
-#      bs-ms-database:
-#        condition: service_healthy
-#    networks:
-#      - bank-account-apis
-#    restart: no
-#    environment:
-#      APPLICATION_NAME4: ${APPLICATION_NAME4}
-#      CONFIGURATION_SERVER_HOST: ${CONFIGURATION_SERVER_HOST}
-#      CONFIGURATION_SERVER_PORT: ${CONFIGURATION_SERVER_PORT}
-#      DATABASE_HOST: ${DATABASE_HOST}
-#      DATABASE_PORT: ${DATABASE_PORT}
-#      DATABASE_NAME1: ${DATABASE_NAME1}
-#      DATABASE_USERNAME: ${DATABASE_USERNAME}
-#      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-#      PUBLIC_KEY: ${PUBLIC_KEY}
-#      PRIVATE_KEY: ${PRIVATE_KEY}
-#      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
-#      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
+  exalt-business-ms-spring-security-aouth2-res-server:
+    image: placidenduwayo1/exalt-business-ms-spring-security-aouth2-res-server:1.0.0
+    container_name: ${APPLICATION_NAME4}
+    build:
+      context: ./exalt-backend/security-microservice/${APPLICATION_NAME4}
+      dockerfile: Dockerfile
+    ports:
+      - ${SERVER_PORT4}:${SERVER_PORT4}
+    depends_on:
+      exalt-microservices-registration-server:
+        condition: service_healthy
+      bank-account-app-apis-dbs:
+        condition: service_healthy
+    networks:
+      - bank-account-apis
+    restart: no
+    environment:
+      APPLICATION_NAME4: ${APPLICATION_NAME4}
+      SERVER_PORT4: ${SERVER_PORT4}
+      CONFIGURATION_SERVER_HOST: ${CONFIGURATION_SERVER_HOST}
+      CONFIGURATION_SERVER_PORT: ${CONFIGURATION_SERVER_PORT}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME1: ${DATABASE_NAME1}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      PUBLIC_KEY: ${PUBLIC_KEY}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
+      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
 
 ## business microservices: customer, bank-account, operation
 #  exalt-business-microservice-customer:

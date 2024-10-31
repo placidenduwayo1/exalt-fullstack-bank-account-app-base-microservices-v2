@@ -10,7 +10,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/placidenduwayo1/exalt-fullstack-bank-account-app-base-microservices.git
+          uri: https://github.com/placidenduwayo1/exalt-fullstack-bank-account-app-base-microservices-v2.git
           default-label: main
           search-paths: configurations-center
           username: placide.nd@gmail.com
