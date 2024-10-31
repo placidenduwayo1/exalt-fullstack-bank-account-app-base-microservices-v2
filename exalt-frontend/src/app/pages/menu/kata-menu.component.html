@@ -1,0 +1,132 @@
+<p-confirmDialog [style]="{width:'20wv'}" />
+<p-messages key="key1" /> <p-messages key="key2" />
+
+<p-menubar [model]="items">
+    <ng-template pTemplate="end">
+        <span style="font-weight: bold; color: green;">{{connectedUser.username}}</span>
+        <p-button icon="pi pi-power-off" [text]="true" (onClick)="logout()" pTooltip="logout" />
+    </ng-template>
+    <ng-template pTemplate="item" let-item>
+        <a pRipple class="flex align-items-center p-menuitem-link">
+            <span [class]="item.icon"></span> &nbsp;<span>{{ item.label }}</span>
+        </a>
+    </ng-template>
+</p-menubar>
+
+<!-- create new roleModel sidebar -->
+<p-sidebar [(visible)]="roleCreateSidebarVisible" [position]="sideBarPisition" [style]="{width:'fit-content'}">
+    <p-card header="Role">
+        <form [formGroup]="roleForm">
+            <div class="p-float-label">
+                <input pInputText id="roleName" formControlName="roleName">
+                <label for="roleName">inpt new roleModel</label>
+            </div>
+            <p-button label="Create" [text]="true" [raised]="true" severity="primary" (onClick)="createRole()"
+                [disabled]="roleForm.invalid" />&nbsp;
+            <p-button label="Cancel" [text]="true" [raised]="true" severity="danger" />
+        </form>
+
+    </p-card>
+</p-sidebar>
+
+<!-- create new customer sidebar -->
+<p-sidebar [(visible)]="customerSidebarVisible" [position]="sideBarPisition" [style]="{
+    width: 'fit-content'}">
+    <p-card header="Create a new customer">
+        <form [formGroup]="customerRequest">
+            <p-splitter [style]="{ height: 'fit-content' }" styleClass="mb-5">
+                <ng-template pTemplate>
+                    <p-card header="customer">
+                        <div class="col flex align-items-center justify-content-center">
+                            <div formGroupName="customer">
+                                <div class="p-float-label">
+                                    <input pInputText type="text" id="firstname" class="form-control"
+                                        formControlName="firstname">
+                                    <label for="firstname">Firstname</label>
+                                </div>
+                                <br>
+                                <div class="p-float-label">
+                                    <input pInputText type="text" id="lastname" class="form-control"
+                                        formControlName="lastname">
+                                    <label for="lastname">Lastname</label>
+                                </div>
+                                <br>
+                                <div class="p-float-label ">
+                                    <input pInputText type="text" id="email" class="form-control"
+                                        formControlName="email">
+                                    <label for="email">Email</label>
+                                </div>
+                            </div>
+                        </div>
+                    </p-card>
+                </ng-template>
+                <ng-template pTemplate>
+                    <p-card header="address">
+                        <div class="col flex align-items-center justify-content-center">
+                            <div formGroupName="address">
+                                <div class="p-float-label">
+                                    <input pInputText type="number" class="form-control" id="streetNum"
+                                        formControlName="streetNum">
+                                    <label for="streetNum">street number</label>
+                                </div>
+                                <br>
+                                <div class="p-float-label">
+                                    <input pInputText type="text" class="form-control" id="streetName"
+                                        formControlName="streetName">
+                                    <label for="streetName">street name</label>
+                                </div>
+                                <br>
+                                <div class="p-float-label">
+                                    <input pInputText type="number" class="form-control" id="poBox"
+                                        formControlName="poBox">
+                                    <label for="poBox">po box</label>
+                                </div>
+                                <br>
+                                <div class="p-float-label">
+                                    <input pInputText type="text" class="form-control" id="city" formControlName="city">
+                                    <label for="city">city name</label>
+                                </div>
+                                <br>
+                                <div class="p-float-label">
+                                    <input pInputText type="text" class="form-control" id="country"
+                                        formControlName="country">
+                                    <label for="country">country name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </p-card>
+                </ng-template>
+            </p-splitter>
+
+            <p-button label="Create" [text]="true" [raised]="true" severity="primary" (onClick)="createCustomer()"
+                [disabled]="customerRequest.invalid" />&nbsp;
+            <p-button label="Cancel" [text]="true" [raised]="true" severity="danger" />
+        </form>
+    </p-card>
+</p-sidebar>
+
+<!-- list all roleModels sidebar -->
+<p-sidebar [(visible)]="rolesListSidebarVisible" [position]="sideBarPisition" [style]="{width:'fit-content'}">
+    <p-card header="List of roleModels">
+        <p-table [value]="roleModels" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+            (onPage)="onTablePageChange($event)" [first]="first">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Role ID</th>
+                    <th>Role Name</th>
+                    <th>Creation Date</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-roleModel>
+                <tr>
+                    <td> {{roleModel.roleId}} </td>
+                    <td> {{roleModel.roleName}} </td>
+                    <td> {{roleModel.createdAt | date:'medium'}} </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <span *ngIf="roleModels"> {{roleModels.length}} roleModels</span>
+            </ng-template>
+        </p-table>
+    </p-card>
+</p-sidebar>

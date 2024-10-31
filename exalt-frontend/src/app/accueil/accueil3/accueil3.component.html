@@ -1,0 +1,30 @@
+<div style="width:80%">
+    <h1 style="color: green; text-align: center;">
+        Bank Account application base microservices
+    </h1>
+</div>
+<p-splitter [panelSizes]="[38, 62]" styleClass="mb-5">
+    <ng-template pTemplate>
+
+        <p-card header="Gateway Api-> Ingress-Controller">
+            <p> As we use <span style="font-weight: bold;">Ingress-Controller</span>, the gateway service we used
+            before
+            is no longer needed, we replace it by
+            <span style="font-weight: bold;">Ingress-Controller</span>. Ingress-Controller become the unique <span
+                style="font-weight: bold;">entrypoint</span>
+            of all incoming request to backend business-microservices.
+            </p>
+            <p>
+            All routes that we have defined in <span style="font-weight: bold;">gateway-api</span> on image below
+            are replaced by rules in <span style="font-weight: bold;">ingress rules</span> in <span
+                style="font-weight: bold;">Ingress-Controller</span>.
+            </p>
+            <img ngSrc="assets/gateway.png" width="500" height="600">
+
+        </p-card>
+    </ng-template>
+
+    <ng-template pTemplate>
+        <img ngSrc="assets/after-ingress.png" width="1150" height="750" alt="microservices base application demo">
+    </ng-template>
+</p-splitter>

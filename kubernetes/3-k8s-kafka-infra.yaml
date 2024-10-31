@@ -1,0 +1,219 @@
+#zookeeper
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper-server
+  labels:
+    app: zookeeper-server
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper-server
+  template:
+    metadata:
+      name: zookeeper-server
+      labels:
+        app: zookeeper-server
+    spec:
+      serviceAccountName: exalt-svc-account
+      containers:
+        - name: zookeeper-server
+          image: zookeeper:3.4.9
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 2181
+              protocol: TCP
+              name: zookeeper-port
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper-server
+  labels:
+    app: zookeeper-server
+  namespace: exalt-ns
+spec:
+  selector:
+    app: zookeeper-server
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+      name: zookeeper-port
+  type: ClusterIP
+---
+# kafka servers
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-server
+  labels:
+    app: kafka-server
+  namespace: exalt-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kafka-server
+  template:
+    metadata:
+      name: kafka-server
+      labels:
+        app: kafka-server
+    spec:
+      serviceAccountName: exalt-svc-account
+      initContainers:
+        - name: zookeeper
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -zooker-server 2181; do echo waiting for zookeeper-server ready; sleep 5; done;'
+      containers:
+        - name: kafka-server
+          image: obsidiandynamics/kafka
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9092
+              protocol: TCP
+              name: kafka-port
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-server
+  labels:
+    app: kafka-server
+  namespace: exalt-ns
+spec:
+  selector:
+    app: kafka-server
+  ports:
+    - port: 9092
+      protocol: TCP
+      targetPort: 9092
+      name: kafka-port
+  type: ClusterIP
+---
+# schema registry
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schema-registry-service
+  labels:
+    app: schema-registry-service
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schema-registry-service
+  template:
+    metadata:
+      name: schema-registry-service
+      labels:
+        app: schema-registry-service
+    spec:
+      serviceAccountName: exalt-svc-account
+      initContainers:
+        - name: zookeeper
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
+      containers:
+        - name: schema-registry-service
+          image: confluentinc/cp-schema-registry:5.4.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+              name: schema-port
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schema-registry-service
+  labels:
+    app: schema-registry-service
+  namespace: exalt-ns
+spec:
+  selector:
+    app: schema-registry-service
+  ports:
+    - port: 9092
+      protocol: TCP
+      targetPort: 9092
+      name: schema-port
+  type: ClusterIP
+---
+# kafka ui
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-UI
+  labels:
+    app: kafka-UI
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-UI
+  template:
+    metadata:
+      name: kafka-UI
+      labels:
+        app: kafka-UI
+    spec:
+      serviceAccountName: exalt-svc-account
+      initContainers:
+        - name: zookeeper
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
+      containers:
+        - name: kafka-UI
+          image: provectuslabs/kafka-ui:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: kafka-ui-port
+          env:
+            - name: KAFKA_CLUSTERS_0_NAME
+              value: kafka-cluster1
+            - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+              value: kafka-server:9092
+            - name: KAFKA_CLUSTERS_0_METRICS_PORT
+              value: '9997'
+            - name: KAFKA_CLUSTERS_0_SCHEMAREGISTRY
+              value: http://schema-registry-service:8081
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-UI
+  labels:
+    app: kafka-UI
+  namespace: exalt-ns
+spec:
+  selector:
+    app: kafka-UI
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      name: kafka-ui-port
+  type: ClusterIP
+
+      

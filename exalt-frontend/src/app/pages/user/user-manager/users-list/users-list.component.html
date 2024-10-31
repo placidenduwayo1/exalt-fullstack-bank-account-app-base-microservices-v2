@@ -1,0 +1,108 @@
+<div style="width:50%">
+    <h1 style="color: green; text-align: center;">
+        List of all users
+    </h1>
+</div>
+<p-confirmDialog [style]="{width:'20wv'}" />
+<p-messages key="key1" /><p-messages key="key2" />
+<p-card [style]="{width:'fit-content'}">
+    <p-table [value]="inputUsers" [globalFilterFields]="['username']" [paginator]="true" [rows]="10"
+        [rowsPerPageOptions]="[10,20,30]" [loading]="isLoading" loadingIcon="pi pi-star pi-spin"
+        (onPage)="onTablePageChange($event)" [first]="first">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th pSortableColumn="username">username <p-sortIcon field="username" /> </th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Created Date</th>
+                <th>Roles</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td> {{user.userId}} </td>
+                <td> {{user.username}} </td>
+                <td> {{user.firstname}} {{user.lastname}} </td>
+                <td> {{user.email}} </td>
+                <td> {{user.createdAt | date:'medium'}} </td>
+                <td>
+                    <ng-container *ngFor="let roleModel of user.roleModels">
+                        {{roleModel.roleName}}
+                    </ng-container>
+                </td>
+                <td>
+                    <p-button icon="pi pi-window-maximize" size="small" [rounded]="true" [text]="true"
+                        pTooltip="add roleModel" tooltipPosition="left" (onClick)="onLoadUser(user);addButtonClicked();
+                        userRoleSidebarVisible=true" severity="success" />
+
+                    <p-button icon="pi pi-window-maximize" size="small" [rounded]="true" [text]="true" severity="danger"
+                        pTooltip="remove roleModel" tooltipPosition="left"
+                        (onClick)=" onLoadUser(user);removeButtonClicked(); userRoleSidebarVisible=true" />
+
+                    <p-button icon="pi pi-window-maximize" size="small" [rounded]="true" [text]="true"
+                        pTooltip="edit user" tooltipPosition="left"
+                        (onClick)="userEditSidebarVisible=true; onLoadUser1(user)" />
+
+                    <p-button icon="pi pi-times" size="small" [rounded]="true" [text]="true" severity="danger"
+                        pTooltip="delete user" tooltipPosition="left" (onClick)="deleteUser(user)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                {{inputUsers ? inputUsers.length : 0 }} Operations
+            </div>
+        </ng-template>
+    </p-table>
+</p-card>
+
+
+<!-- add /remove roleModel to user sidebar -->
+<p-sidebar [(visible)]="userRoleSidebarVisible" [position]="sidebarPosition" [style]="{width:'fit-content'}"
+    *ngIf="selectedUser">
+    <p-card [header]="headerMsg">
+        <form [formGroup]="addRoleForm">
+            <div>
+                <label for="user">User</label><br>
+                <input pInputText id="user" formControlName="user" [(ngModel)]="selectedUserNgModel">
+            </div>
+            <br>
+            <div class="p-float-label">
+                <input pInputText id="roleName" formControlName="roleName">
+                <label for="roleName">new roleModel to {{selectedUser.username}} </label>
+            </div>
+            <br>
+            <div class="buttons">
+                <p-button size="small" [disabled]="addRoleForm.invalid" label="Submit" (onClick)="assignUserRole()" />
+            </div>
+        </form>
+    </p-card>
+</p-sidebar>
+
+<!-- edit user sidebar -->
+<p-sidebar [(visible)]="userEditSidebarVisible" [position]="sidebarPosition" *ngIf="newSelectedUser"
+    [style]="{width:'fit-content'}">
+    <p-card header="Edit {{newSelectedUser.username}}">
+        <form [formGroup]="editUserForm">
+            <div class="p-float-label">
+                <input pInputText id="firstname" formControlName="firstname" [(ngModel)]="newSelectedUser.firstname">
+                <label for="firstname">firstname</label>
+            </div>
+            <br>
+            <div class="p-float-label">
+                <input pInputText id="lastname" formControlName="lastname" [(ngModel)]="newSelectedUser.lastname">
+                <label for="lastname">lastname</label>
+            </div>
+            <br>
+            <div class="p-float-label">
+                <input pInputText id="email" formControlName="email" [(ngModel)]="newSelectedUser.email">
+                <label for="email">email</label>
+            </div>
+            <br>
+            <div class="buttons">
+                <p-button size="small" [disabled]="editUserForm.invalid" label="Submit" (onClick)="editUser()" />
+            </div>
+        </form>
+    </p-card>
+</p-sidebar>

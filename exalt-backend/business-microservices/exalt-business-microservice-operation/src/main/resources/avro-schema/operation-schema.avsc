@@ -1,0 +1,89 @@
+{
+  "namespace": "fr.exalt.businessmicroserviceoperation.domain.avromodels.operation",
+  "name": "OperationAvro",
+  "type": "record",
+  "fields": [
+    {
+      "name": "operationId",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "mount",
+      "type": "double"
+    },
+    {
+      "name": "createdAt",
+      "type": "string"
+    },
+    {
+      "name": "accountId",
+      "type": "string"
+    },
+    {
+      "name": "bankAccount",
+      "type": {
+        "name": "BankAccountAvro",
+        "type": "record",
+        "fields": [
+          {
+            "name": "accountId",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string"
+          },
+          {
+            "name": "balance",
+            "type": "double"
+          },
+          {
+            "name": "overdraft",
+            "type": "double"
+          },
+          {
+            "name": "customerId",
+            "type": "string"
+          },
+          {
+            "name": "customer",
+            "type": {
+              "name": "CustomerAvro",
+              "type": "record",
+              "fields": [
+                {
+                  "name": "customerId",
+                  "type": "string"
+                },
+                {
+                  "name": "firstname",
+                  "type": "string"
+                },
+                {
+                  "name": "lastname",
+                  "type": "string"
+                },
+                {
+                  "name": "state",
+                  "type": "string"
+                },
+                {
+                  "name": "email",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

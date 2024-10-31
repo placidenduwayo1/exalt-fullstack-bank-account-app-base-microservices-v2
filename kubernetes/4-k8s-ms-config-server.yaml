@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exalt-microservices-configuration-server
+  labels:
+    app: exalt-microservices-configuration-server
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exalt-microservices-configuration-server
+  template:
+    metadata:
+      name: exalt-microservices-configuration-server
+      labels:
+        app: exalt-microservices-configuration-server
+    spec:
+      serviceAccountName: exalt-svc-account
+      containers:
+        - name: exalt-microservices-configuration-server
+          image: placidenduwayo1/exalt-microservices-configuration-server:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8100
+              name: ms-config-svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exalt-microservices-configuration-server
+  labels:
+    app: exalt-microservices-configuration-server
+  namespace: exalt-ns
+spec:
+  selector:
+    app: exalt-microservices-configuration-server
+  ports:
+    - port: 8100
+      protocol: TCP
+      targetPort: 8100
+  type: ClusterIP

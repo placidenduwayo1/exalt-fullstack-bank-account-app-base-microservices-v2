@@ -1,0 +1,127 @@
+{
+  "namespace": "fr.exalt.businessmicroserviceoperation.domain.avromodels.transfer",
+  "name": "TransferOperationAvro",
+  "type": "record",
+  "fields": [
+    {
+      "name": "originAccount",
+      "type": {
+        "name": "OriginAccountAvro",
+        "type": "record",
+        "fields": [
+          {
+            "name": "accountId",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string"
+          },
+          {
+            "name": "balance",
+            "type": "double"
+          },
+          {
+            "name": "customerId",
+            "type": "string"
+          },
+          {
+            "name": "originCustomer",
+            "type": {
+              "name": "OriginCustomerAvro",
+              "type": "record",
+              "fields": [
+                {
+                  "name": "customerId",
+                  "type": "string"
+                },
+                {
+                  "name": "firstname",
+                  "type": "string"
+                },
+                {
+                  "name": "lastname",
+                  "type": "string"
+                },
+                {
+                  "name": "state",
+                  "type": "string"
+                },
+                {
+                  "name": "email",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "destinationAccount",
+      "type": {
+        "name": "DestinationAccountAvro",
+        "type": "record",
+        "fields": [
+          {
+            "name": "accountId",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string"
+          },
+          {
+            "name": "balance",
+            "type": "double"
+          },
+          {
+            "name": "customerId",
+            "type": "string"
+          },
+          {
+            "name": "destinationCustomer",
+            "type": {
+              "name": "DestinationCustomerAvro",
+              "type": "record",
+              "fields": [
+                {
+                  "name": "customerId",
+                  "type": "string"
+                },
+                {
+                  "name": "firstname",
+                  "type": "string"
+                },
+                {
+                  "name": "lastname",
+                  "type": "string"
+                },
+                {
+                  "name": "state",
+                  "type": "string"
+                },
+                {
+                  "name": "email",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "mount",
+      "type": "double"
+    }
+  ]
+}

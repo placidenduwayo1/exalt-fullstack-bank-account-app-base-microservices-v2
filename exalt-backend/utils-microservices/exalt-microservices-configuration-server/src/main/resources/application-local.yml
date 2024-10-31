@@ -1,0 +1,21 @@
+# application name
+spring:
+  application:
+    name: exalt-microservices-configuration-server
+  # disable banner
+  main:
+    banner-mode: off
+  # cloud config server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/placidenduwayo1/exalt-fullstack-bank-account-app-base-microservices.git
+          default-label: main
+          search-paths: configurations-center
+          username: placide.nd@gmail.com
+          password: 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
+# cloud config server port
+server:
+  address: localhost
+  port: 8100

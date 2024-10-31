@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exalt-gateway-service-proxy
+  labels:
+    app: exalt-gateway-service-proxy
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exalt-gateway-service-proxy
+  template:
+    metadata:
+      name: exalt-gateway-service-proxy
+      labels:
+        app: exalt-gateway-service-proxy
+    spec:
+      serviceAccountName: exalt-svc-account
+      initContainers:
+        - name: ms-config-service
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for exalt-microservices-config-service ready; sleep 5; done;'
+      containers:
+        - name: exalt-gateway-service-proxy
+          image: placidenduwayo1/exalt-gateway-service-proxy:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8101
+              name: gateway-proxy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exalt-gateway-service-proxy
+  labels:
+    app: exalt-gateway-service-proxy
+  namespace: exalt-ns
+spec:
+  selector:
+    app: exalt-gateway-service-proxy
+  ports:
+    - port: 8101
+      protocol: TCP
+      targetPort: 8101
+  type: ClusterIP
+---
+# kafka-ui

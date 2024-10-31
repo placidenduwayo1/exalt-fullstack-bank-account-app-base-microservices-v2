@@ -1,0 +1,64 @@
+{
+  "namespace": "fr.exalt.businessmicroserviceaccount.domain.avrobeans",
+  "name": "SavingBankAccountAvro",
+  "type": "record",
+  "fields": [
+    {
+      "name": "accountId",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "state",
+      "type": "string"
+    },
+    {
+      "name": "balance",
+      "type": "double"
+    },
+    {
+      "name": "interestRate",
+      "type": "double"
+    },
+    {
+      "name": "createdAt",
+      "type": "string"
+    },
+    {
+      "name": "customerId",
+      "type": "string"
+    },
+    {
+      "name": "customer",
+      "type": {
+        "name": "CustomerAvro",
+        "type": "record",
+        "fields": [
+          {
+            "name": "customerId",
+            "type": "string"
+          },
+          {
+            "name": "firstname",
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exalt-bank-account-angular-app
+  labels:
+    app: exalt-bank-account-angular-app
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exalt-bank-account-angular-app
+  template:
+    metadata:
+      name: exalt-bank-account-angular-app
+      labels:
+        app: exalt-bank-account-angular-app
+    spec:
+      serviceAccountName: exalt-svc-account
+      containers:
+        - name: exalt-bank-account-angular-app
+          image: placidenduwayo1/exalt-bank-account-angular-app:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: front-port
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exalt-bank-account-angular-app
+  labels:
+    app: exalt-bank-account-angular-app
+  namespace: exalt-ns
+spec:
+  selector:
+    app: exalt-bank-account-angular-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: front-port
+  type: ClusterIP
+      

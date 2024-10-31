@@ -1,0 +1,350 @@
+services:
+  bank-account-app-apis-dbs:
+    image: mysql:8.0
+    container_name: ${DATABASE_HOST}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "${SERVER_ADDRESS}", "-u${DATABASE_USERNAME}", "-p${DATABASE_PASSWORD}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    volumes:
+      - bank_account_app_apis_volumes:/var/lib/mysql
+      - ./mss-databases:/docker-entrypoint-initdb.d
+    networks:
+      - bank-account-apis
+
+##-------------- kafka infrastructure -------------------
+
+# zookeeper
+  zookeeper-server:
+    image: zookeeper:3.4.9
+    container_name: ${ZOOKEEPER_HOST}
+    ports:
+      - ${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}
+    networks:
+      - bank-account-apis
+    healthcheck:
+      test: nc -z ${SERVER_ADDRESS} ${ZOOKEEPER_PORT} || exit -1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: no
+
+  #kafka brokers
+  kafka-server1:
+    image: obsidiandynamics/kafka
+    container_name: ${KAFKA_SERVER1}
+    networks:
+      - bank-account-apis
+    ports:
+      - ${KAFKA_SERVER1_PORT1}:${KAFKA_SERVER1_PORT1}
+      - ${KAFKA_SERVER1_PORT2}:${KAFKA_SERVER1_PORT2}
+    environment:
+      KAFKA_BROKER_ID: 0
+      KAFKA_ZOOKEEPER_CONNECT: ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT}
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:${KAFKA_SERVER1_PORT2},PLAINTEXT_HOST://0.0.0.0:${KAFKA_SERVER1_PORT1}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_SERVER1}:${KAFKA_SERVER1_PORT2},PLAINTEXT_HOST://${SERVER_ADDRESS}:${KAFKA_SERVER1_PORT1}
+    depends_on:
+      zookeeper-server:
+        condition: service_healthy
+    healthcheck:
+      test: nc -z ${SERVER_ADDRESS} ${KAFKA_SERVER1_PORT2} || exit -1
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    restart: always
+
+  kafka-server2:
+    image: obsidiandynamics/kafka
+    container_name: ${KAFKA_SERVER2}
+    networks:
+      - bank-account-apis
+    ports:
+      - ${KAFKA_SERVER2_PORT1}:${KAFKA_SERVER2_PORT1}
+      - ${KAFKA_SERVER2_PORT2}:${KAFKA_SERVER2_PORT2}
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT}
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:${KAFKA_SERVER2_PORT2},PLAINTEXT_HOST://0.0.0.0:${KAFKA_SERVER2_PORT1}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_SERVER1}:${KAFKA_SERVER2_PORT2},PLAINTEXT_HOST://${SERVER_ADDRESS}:${KAFKA_SERVER2_PORT1}
+    depends_on:
+      zookeeper-server:
+        condition: service_healthy
+    healthcheck:
+      test: nc -z ${SERVER_ADDRESS} ${KAFKA_SERVER2_PORT2} || exit -1
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    restart: no
+
+  # schema registry for avro serialization
+  schema-registry-service:
+    image: confluentinc/cp-schema-registry:5.4.0
+    container_name: ${SCHEMA_REGISTRY_SERVER_HOST}
+    depends_on:
+      kafka-server1:
+        condition: service_healthy
+      kafka-server2:
+        condition: service_healthy
+    ports:
+      - ${SCHEMA_REGISTRY_SERVER_PORT}:${SCHEMA_REGISTRY_SERVER_PORT}
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: ${SCHEMA_REGISTRY_SERVER_HOST}
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: ${KAFKA_SERVER1}:${KAFKA_SERVER1_PORT2},${KAFKA_SERVER2}:${KAFKA_SERVER2_PORT2}
+    networks:
+      - bank-account-apis
+    restart: no
+
+    # UI for kafka
+  kafka-UI:
+    container_name: ${KAFKA_UI_HOST}
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - ${KAFKA_UI_PORT}:${KAFKA_UI_PORT}
+    environment:
+      KAFKA_CLUSTERS_0_NAME: kafka-cluster1
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: ${KAFKA_SERVER1}:${KAFKA_SERVER1_PORT2}
+      KAFKA_CLUSTERS_0_METRICS_PORT: 9997
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: ${SCHEMA_REGISTRY_SERVER_HOST}:${SCHEMA_REGISTRY_SERVER_PORT}
+      KAFKA_CLUSTERS_1_NAME: kafka-cluster2
+      KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: ${KAFKA_SERVER2}:${KAFKA_SERVER2_PORT2}
+      KAFKA_CLUSTERS_1_METRICS_PORT: 9998
+      KAFKA_CLUSTERS_1_SCHEMAREGISTRY: ${SCHEMA_REGISTRY_SERVER_HOST}:${SCHEMA_REGISTRY_SERVER_PORT}
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    depends_on:
+      kafka-server1:
+        condition: service_healthy
+      kafka-server2:
+        condition: service_healthy
+    networks:
+      - bank-account-apis
+    restart: no
+
+#  # ---------------- transverse microservices---------------------
+  exalt-microservices-configuration-server:
+    image: placidenduwayo1/${APPLICATION_NAME1}:1.0.0
+    container_name: ${APPLICATION_NAME1}
+    build:
+      context: ../exalt-backend/utils-microservices/exalt-microservices-configuration-server
+      dockerfile: Dockerfile
+    ports:
+      - ${SERVER_PORT1}:${SERVER_PORT1}
+    networks:
+      - bank-account-apis
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "${APPLICATION_NAME1}:${SERVER_PORT1}" ]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: no
+    environment:
+      APPLICATION_NAME1: ${APPLICATION_NAME1}
+      SERVER_PORT1: ${SERVER_PORT1}
+      CLOUD_CONFIG_SERVER_GIT_URI: ${CLOUD_CONFIG_SERVER_GIT_URI}
+      CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL: ${CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL}
+      CLOUD_CONFIG_SERVER_GIT_PATHS: ${CLOUD_CONFIG_SERVER_GIT_PATHS}
+      CLOUD_CONFIG_SERVER_GIT_USERNAME: ${CLOUD_CONFIG_SERVER_GIT_USERNAME}
+      CLOUD_CONFIG_SERVER_GIT_PASSWORD: ${CLOUD_CONFIG_SERVER_GIT_PASSWORD}
+
+  exalt-microservices-registration-server:
+    image: placidenduwayo1/${APPLICATION_NAME2}:1.0.0
+    container_name: ${APPLICATION_NAME2}
+    build:
+      context: ../exalt-backend/utils-microservices/exalt-microservices-registration-server
+      dockerfile: Dockerfile
+    ports:
+      - ${SERVER_PORT2}:${SERVER_PORT2}
+    networks:
+      - bank-account-apis
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "${APPLICATION_NAME2}:${SERVER_PORT2}" ]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    restart: no
+    environment:
+      APPLICATION_NAME2: ${APPLICATION_NAME2}
+      SERVER_PORT2: ${SERVER_PORT2}
+      CONFIGURATION_SERVER_HOST: ${CONFIGURATION_SERVER_HOST}
+      CONFIGURATION_SERVER_PORT: ${CONFIGURATION_SERVER_PORT}
+    depends_on:
+      exalt-microservices-configuration-server:
+        condition: service_healthy
+
+  exalt-gateway-service-proxy:
+    image: placidenduwayo1/${APPLICATION_NAME3}:1.0.0
+    container_name: ${APPLICATION_NAME3}
+    build:
+      context: ../exalt-backend/utils-microservices/exalt-gateway-service-proxy
+      dockerfile: Dockerfile
+    ports:
+      - ${SERVER_PORT3}:${SERVER_PORT3}
+    depends_on:
+      exalt-microservices-registration-server:
+        condition: service_healthy
+    networks:
+      - bank-account-apis
+    restart: no
+    environment:
+      APPLICATION_NAME3: ${APPLICATION_NAME3}
+      SERVER_PORT3: ${SERVER_PORT3}
+      CONFIGURATION_SERVER_HOST: ${CONFIGURATION_SERVER_HOST}
+      CONFIGURATION_SERVER_PORT: ${CONFIGURATION_SERVER_PORT}
+      GATEWAY_ROUTE_ID1: ${GATEWAY_ROUTE_ID1}
+      GATEWAY_ROUTE_URI1: ${GATEWAY_ROUTE_URI1}
+      GATEWAY_ROUTE_ID2: ${GATEWAY_ROUTE_ID2}
+      GATEWAY_ROUTE_URI2: ${GATEWAY_ROUTE_URI2}
+      GATEWAY_ROUTE_ID3: ${GATEWAY_ROUTE_ID3}
+      GATEWAY_ROUTE_URI3: ${GATEWAY_ROUTE_URI3}
+      GATEWAY_ROUTE_ID4: ${GATEWAY_ROUTE_ID4}
+      GATEWAY_ROUTE_URI4: ${GATEWAY_ROUTE_URI4}
+      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
+      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
+
+#  ## spring security microservice
+#  exalt-business-ms-spring-security-aouth2-res-server:
+#    image: placidenduwayo1/exalt-business-ms-spring-security-aouth2-res-server:1.0.0
+#    container_name: ${APPLICATION_NAME4}
+#    build:
+#      context: ./exalt-backend/security-microservice/${APPLICATION_NAME4}
+#      dockerfile: Dockerfile
+#    ports:
+#      - 8102:8102
+#    depends_on:
+#      exalt-microservices-registration-server:
+#        condition: service_healthy
+#      bs-ms-database:
+#        condition: service_healthy
+#    networks:
+#      - bank-account-apis
+#    restart: no
+#    environment:
+#      APPLICATION_NAME4: ${APPLICATION_NAME4}
+#      CONFIGURATION_SERVER_HOST: ${CONFIGURATION_SERVER_HOST}
+#      CONFIGURATION_SERVER_PORT: ${CONFIGURATION_SERVER_PORT}
+#      DATABASE_HOST: ${DATABASE_HOST}
+#      DATABASE_PORT: ${DATABASE_PORT}
+#      DATABASE_NAME1: ${DATABASE_NAME1}
+#      DATABASE_USERNAME: ${DATABASE_USERNAME}
+#      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+#      PUBLIC_KEY: ${PUBLIC_KEY}
+#      PRIVATE_KEY: ${PRIVATE_KEY}
+#      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
+#      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
+
+## business microservices: customer, bank-account, operation
+#  exalt-business-microservice-customer:
+#    image: placidenduwayo1/exalt-business-microservice-customer:1.0.0
+#    container_name: exalt-business-microservice-customer
+#    build:
+#      context: ./exalt-backend/business-microservices/exalt-business-microservice-customer
+#      dockerfile: Dockerfile
+#    ports:
+#      - 8103:8103
+#    depends_on:
+#      exalt-microservices-registration-server:
+#        condition: service_healthy
+#      bs-ms-database:
+#        condition: service_healthy
+#      kafka-server1:
+#        condition: service_healthy
+#      kafka-server2:
+#        condition: service_healthy
+#    networks:
+#      - bank-account-apis
+#    restart: no
+#
+#  exalt-business-microservice-bank-account:
+#    image: placidenduwayo1/exalt-business-microservice-bank-account:1.0.0
+#    container_name: exalt-business-microservice-bank-account
+#    build:
+#      context: ./exalt-backend/business-microservices/exalt-business-microservice-bankaccount
+#      dockerfile: Dockerfile
+#    ports:
+#      - 8104:8104
+#    depends_on:
+#      exalt-microservices-registration-server:
+#        condition: service_healthy
+#      bs-ms-database:
+#        condition: service_healthy
+#      kafka-server1:
+#        condition: service_healthy
+#      kafka-server2:
+#        condition: service_healthy
+#    networks:
+#      - bank-account-apis
+#    restart: no
+#    environment:
+#      APPLICATION_NAME5: ${APPLICATION_NAME5}
+#      CONFIGURATION_SERVER_HOST: ${CONFIGURATION_SERVER_HOST}
+#      CONFIGURATION_SERVER_PORT: ${CONFIGURATION_SERVER_PORT}
+#      DATABASE_HOSTNAME: ${DATABASE_HOSTNAME}
+#      DATABASE_PORT: ${DATABASE_PORT}
+#      DATABASE_NAME2: ${DATABASE_NAME2}
+#      DATABASE_USERNAME: ${DATABASE_USERNAME}
+#      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+#      KAFKA_BROKER_HOST1: ${KAFKA_BROKER_HOST1}
+#      KAFKA_BROKER_PORT1: ${KAFKA_BROKER_PORT1}
+#      KAFKA_BROKER_HOST2: ${KAFKA_BROKER_HOST2}
+#      KAFKA_BROKER_PORT2: ${KAFKA_BROKER_PORT2}
+#      KAFKA_KEY_SERIALIZER: ${KAFKA_KEY_SERIALIZER}
+#      KAFKA_VALUE_SERIALIZER: ${KAFKA_VALUE_SERIALIZER}
+#      KAFKA_KEY_DESERIALIZER: ${KAFKA_KEY_DESERIALIZER}
+#      KAFKA_VALUE_DESERIALIZER: ${KAFKA_VALUE_DESERIALIZER}
+#      SCHEMA_REGISTRY_SERVER_HOST: ${SCHEMA_REGISTRY_SERVER_HOST}
+#      SCHEMA_REGISTRY_SERVER_PORT: ${SCHEMA_REGISTRY_SERVER_PORT}
+#      KAFKA_APPLICATION_TOPIC_NAME000: ${KAFKA_APPLICATION_TOPIC_NAME000}
+#      KAFKA_APPLICATION_TOPIC_NAME001: ${KAFKA_APPLICATION_TOPIC_NAME001}
+#      KAFKA_APPLICATION_TOPIC_RETENTION: ${KAFKA_APPLICATION_TOPIC_RETENTION}
+#      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
+#      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
+
+#  exalt-business-microservice-operation:
+#    image: placidenduwayo1/exalt-business-microservice-operation:1.0.0
+#    container_name: exalt-business-microservice-operation
+#    build:
+#      context: ./exalt-backend/business-microservices/exalt-business-microservice-operation
+#      dockerfile: Dockerfile
+#    ports:
+#      - 8105:8105
+#    depends_on:
+#      exalt-microservices-registration-server:
+#        condition: service_healthy
+#      bs-ms-database:
+#        condition: service_healthy
+#      kafka-server1:
+#        condition: service_healthy
+#      kafka-server2:
+#        condition: service_healthy
+#    networks:
+#      - bank-account-apis
+#    restart: no
+#
+#  # frontend angular application
+#  exalt-bank-account-angular-app:
+#    image: placidenduwayo1/exalt-bank-account-angular-app:1.0.0
+#    container_name: exalt-bank-account-angular-app
+#    build:
+#       context: ./exalt-frontend
+#       dockerfile: Dockerfile
+#    ports:
+#      - 4200:80
+#    networks:
+#      - bank-account-apis
+#    restart: no
+
+networks:
+  bank-account-apis:
+volumes:
+  bank_account_app_apis_volumes:

@@ -1,0 +1,35 @@
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: ${APPLICATION_NAME4}
+
+  cloud:
+    config:
+      uri: ${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
+
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME1}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    user: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+rsa:
+  public-key: ${PUBLIC_KEY}
+  private-key: ${PRIVATE_KEY}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
+
+server:
+  address: localhost
+  port: 8102

@@ -1,0 +1,79 @@
+<div *ngIf="tableEmpty then tableIsEmpty else tableNotEmpty"></div>
+
+<ng-template #tableNotEmpty>
+    <div style="width:80%">
+        <h3 style="color: red; text-align: center;">
+            Risk bank accounts and their associated customers
+        </h3>
+    </div>
+    <p-card [style]="{width:'fit-content'}">
+        <p-messages key="key1" /><p-messages key="key2" />
+        <p-confirmDialog [style]="{width: '20vw'}" />
+        <p-table #dt [value]="riskAccounts" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
+            [tableStyle]="{ 'min-width': 'fit-content' }"
+            [globalFilterFields]="['accountId','balance','type','customer.lastname','createdAt']" [loading]="isLoading"
+            loadingIcon="pi pi-star pi-spin">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Account ID<br>
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                placeholder="search" size="5" />
+                        </span>
+                    </th>
+                    <th pSortableColumn="type">Type<p-sortIcon field="type" /></th>
+                    <th>State</th>
+                    <th pSortableColumn="balance">Balance<p-sortIcon field="balance" /></th>
+                    <th>Overdraft / I Rate</th>
+                    <th pSortableColumn="createdAt">Creation date<p-sortIcon field="createdAt" /> </th>
+                    <th>Customer</th>
+                    <th>Customer name<br>
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                placeholder="search" size="5" />
+                        </span>
+                    </th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-account>
+                <tr>
+                    <td [style]="{width:'10%'}">{{account.accountId}}</td>
+
+                    <td> <p-tag [value]="account.type" [severity]="getAccountTypeSeverity(account.type)"> </p-tag></td>
+                    <td><p-tag [value]="account.state" [severity]="getAccountStateSeverity(account.state)" /></td>
+                    <td> <p-tag [value]="account.balance" [severity]="getAccountBalanceSeverity(account)"> </p-tag></td>
+                    <td> {{account.overdraft | currency:'EUR'}} {{account.interestRate | number:'1.2-2'}} </td>
+                    <td>{{account.createdAt | date:'medium'}}</td>
+                    <td>
+                        <ul>
+                            <li><span>ID</span>: {{account.customer.customerId}} </li>
+                            <li><span>Name</span>: {{account.customer.firstname}}
+                                {{account.customer.lastname}}</li>
+                            <li><span>Email</span>: {{account.customer.email}}</li>
+                            <li><span>State</span>: <p-tag [value]="account.customer.state"
+                                    [severity]="getCustomerStateSeverity(account.customer.state)"></p-tag></li>
+                        </ul>
+                    </td>
+                    <td>{{account.customer.lastname}}</td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                    {{riskAccounts ? riskAccounts.length : 0 }} Bank Accounts
+                </div>
+            </ng-template>
+        </p-table>
+    </p-card>
+</ng-template>
+
+<ng-template #tableIsEmpty>
+    <div style="width:80%">
+        <h3 style="text-align: center;color: green;">
+           No risk bank accounts
+        </h3>
+    </div>
+</ng-template>

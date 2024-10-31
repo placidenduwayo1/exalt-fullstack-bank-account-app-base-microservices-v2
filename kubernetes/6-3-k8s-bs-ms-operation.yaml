@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exalt-business-microservice-operation
+  labels:
+    app: exalt-business-microservice-operation
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exalt-business-microservice-operation
+  template:
+    metadata:
+      name: exalt-business-microservice-operation
+      labels:
+        app: exalt-business-microservice-operation
+    spec:
+      serviceAccountName: exalt-svc-account
+      containers:
+        - name: exalt-business-microservice-operation
+          image: placidenduwayo1/exalt-business-microservice-operation:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8105
+              name: operation-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exalt-business-microservice-operation
+  labels:
+    app: exalt-business-microservice-operation
+  namespace: exalt-ns
+spec:
+  selector:
+    app: exalt-business-microservice-operation
+  ports:
+    - protocol: TCP
+      port: 8105
+      targetPort: 8105
+      name: operation-api
+  type: ClusterIP
+      

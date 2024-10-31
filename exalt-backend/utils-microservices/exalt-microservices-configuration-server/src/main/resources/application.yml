@@ -1,0 +1,19 @@
+# application name
+spring:
+  application:
+    name: ${APPLICATION_NAME1}
+  # disable banner
+  main:
+    banner-mode: off
+  # cloud config server
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${CLOUD_CONFIG_SERVER_GIT_URI}
+          default-label: ${CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL}
+          search-paths: ${CLOUD_CONFIG_SERVER_GIT_PATHS}
+          username: ${CLOUD_CONFIG_SERVER_GIT_USERNAME}
+          password: ${CLOUD_CONFIG_SERVER_GIT_PASSWORD}
+server:
+  port: ${SERVER_PORT1}

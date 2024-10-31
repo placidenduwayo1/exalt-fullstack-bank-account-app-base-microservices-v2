@@ -1,0 +1,9 @@
+*.idea
+**/*.log
+**/*.iml
+**/*.class
+**/*.jar
+**/target
+**/*.cmd
+**/*.html
+**/**/application-local.yml.yml

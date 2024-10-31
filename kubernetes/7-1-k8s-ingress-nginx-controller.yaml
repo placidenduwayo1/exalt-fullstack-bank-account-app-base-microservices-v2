@@ -1,0 +1,73 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: exalt-app-ingress-nginx
+  labels:
+    app: exalt-app-ingress-nginx
+  namespace: exalt-ns
+  annotations:
+    networking.gke.io/v1beta1.FrontendConfig: "http-to-https"
+    kubernetes.io/ingress.allow-http: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: exalt.front.app.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-bank-account-angular-app
+                port:
+                  name: front-port
+
+    - host: exalt.bs-ms.security.com
+      http:
+        paths:
+          - path: /api-security
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: exalt-business-ms-spring-security-aouth2-res-server
+                port:
+                  name: security-port
+
+    - host: exalt.bs-ms.customer.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: exalt-business-microservice-customer
+                port:
+                  name: customer-api
+            path: /api-customer
+            pathType: Prefix
+
+    - host: exalt.bs-ms.bank.account.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: exalt-business-microservice-bank-account
+                port:
+                  name: b-account-api
+            path: /api-bank-account
+            pathType: Prefix
+
+    - host: exalt.bs-ms.operation.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: exalt-business-microservice-operation
+                port:
+                  name: operation-api
+            path: /api-operation
+            pathType: Prefix
+
+
+
+

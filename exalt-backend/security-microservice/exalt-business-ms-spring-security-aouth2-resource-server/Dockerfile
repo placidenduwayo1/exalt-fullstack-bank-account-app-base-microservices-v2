@@ -1,0 +1,40 @@
+FROM maven:3.9.8-eclipse-temurin-21-alpine AS builder
+ARG CONFIGURATION_SERVER_HOST
+ARG CONFIGURATION_SERVER_PORT
+ARG DATABASE_HOST
+ARG DATABASE_PORT
+ARG DATABASE_NAME
+ARG DATABASE_USERNAME
+ARG DATABASE_PASSWORD
+ARG PUBLIC_KEY
+ARG PRIVATE_KEY
+ARG SERVICES_REGISTRY_SERVER_HOST
+ARG SERVICES_REGISTRY_SERVER_PORT
+
+ENV CONFIGURATION_SERVER_HOST=${CONFIGURATION_SERVER_HOST}
+ENV CONFIGURATION_SERVER_PORT=${CONFIGURATION_SERVER_PORT}
+ENV DATABASE_HOST=${DATABASE_HOST}
+ENV DATABASE_PORT=${DATABASE_PORT}
+ENV DATABASE_NAME=${DATABASE_NAME}
+ENV DATABASE_USERNAME=${DATABASE_USERNAME}
+ENV DATABASE_PASSWORD=${DATABASE_PASSWORD}
+ENV PUBLIC_KEY=${PUBLIC_KEY}
+ENV PRIVATE_KEY=${PRIVATE_KEY}
+ENV SERVICES_REGISTRY_SERVER_HOST=${SERVICES_REGISTRY_SERVER_HOST}
+ENV SERVICES_REGISTRY_SERVER_PORT=${SERVICES_REGISTRY_SERVER_PORT}
+
+WORKDIR /build/
+COPY pom.xml /build/
+COPY src /build/src
+RUN mvn package -DskipTest
+WORKDIR /build/target/
+RUN java -Djarmode=layertools -jar exalt-business-ms-spring-security-aouth2-res-server.jar extract
+
+FROM maven:3.9.8-eclipse-temurin-21-alpine AS final
+COPY --from=builder /build/target/dependencies/ ./
+COPY --from=builder /build/target/spring-boot-loader/ ./
+COPY --from=builder /build/target/snapshot-dependencies/ ./
+COPY --from=builder /build/target/application/ ./
+
+EXPOSE 8102
+ENTRYPOINT ["java", "-Dspring.profiles.active=integ", "org.springframework.boot.loader.launch.JarLauncher"]

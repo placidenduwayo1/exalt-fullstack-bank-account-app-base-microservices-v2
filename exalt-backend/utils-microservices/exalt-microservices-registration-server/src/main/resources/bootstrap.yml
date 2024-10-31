@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME2}
+  main:
+    banner-mode: off
+  cloud:
+    config:
+      uri: http://${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
+server:
+  address: localhost
+  port: 8761

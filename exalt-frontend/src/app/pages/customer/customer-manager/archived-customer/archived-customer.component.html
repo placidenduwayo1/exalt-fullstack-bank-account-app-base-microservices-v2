@@ -1,0 +1,69 @@
+<div *ngIf="tableIsmpty then tableEmpty else tableNotEmpty"></div>
+
+<ng-template #tableEmpty>
+    <div style="width:80%">
+        <h1 style="color:green; text-align: center;">
+          No archived customers
+        </h1>
+    </div>
+</ng-template>
+
+<ng-template #tableNotEmpty>
+    <div style="width:80%">
+        <h1 style="color: red; text-align: center;">
+           archived customers
+        </h1>
+    </div>
+    <p-card [style]="{ width: 'fit-content' }">
+        <p-messages key="key1" /><p-messages key="key2" />
+        <p-confirmDialog [style]="{width: '20vw'}" />
+        <p-table #dt [value]="archivedCustomers" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20,30, 50]"
+            [globalFilterFields]="['customerId','lastname','firstname', 'createdAt']" [loading]="isLoading"
+            loadingIcon="pi pi-star pi-spin">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Customer Id<br>
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                placeholder="search" size="5" />
+                        </span>
+                    </th>
+                    <th pSortableColumn="firstname">Firstname <p-sortIcon field="firstname" /></th>
+                    <th>Lastname<br>
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                placeholder="search" size="5" />
+                        </span>
+                    </th>
+                    <th>Email</th>
+                    <th>State</th>
+                    <th pSortableColumn="createdAt">Creation date <p-sortIcon field="createdAt" /></th>
+                    <th>Address</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-customer>
+                <tr>
+                    <td [style]="{width:'15%'}">{{ customer.customerId }}</td>
+                    <td>{{ customer.firstname }}</td>
+                    <td> {{ customer.lastname }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td><p-tag [value]="customer.state" [severity]="getCustomerStateServerity(customer.state)"></p-tag></td>
+                    <td>{{ customer.createdAt | date:'medium'}}</td>
+                    <td [style]="{width:'15%'}">{{ customer.address.streetNum }}
+                        {{ customer.address.streetName }},
+                        {{ customer.address.poBox }}
+                        {{ customer.address.city }},
+                        {{ customer.address.country }}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                    {{archivedCustomers ? archivedCustomers.length : 0 }} customers
+                </div>
+            </ng-template>
+        </p-table>
+    </p-card>    
+</ng-template>

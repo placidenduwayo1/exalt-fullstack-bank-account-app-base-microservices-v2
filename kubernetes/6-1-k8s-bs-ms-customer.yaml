@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exalt-business-microservice-customer
+  labels:
+    app: exalt-business-microservice-customer
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exalt-business-microservice-customer
+  template:
+    metadata:
+      name: exalt-business-microservice-customer
+      labels:
+        app: exalt-business-microservice-customer
+    spec:
+      serviceAccountName: exalt-svc-account
+      initContainers:
+        - name: ms-config-service
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for exalt-microservices-config-service ready; sleep 5; done;'
+        - name: database
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z mysql-db 3306; do echo waiting for database to be ready; sleep 5; done;'
+      containers:
+        - name: exalt-business-microservice-customer
+          image: placidenduwayo1/exalt-business-microservice-customer:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8103
+              name: customer-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exalt-business-microservice-customer
+  labels:
+    app: exalt-business-microservice-customer
+  namespace: exalt-ns
+spec:
+  selector:
+    app: exalt-business-microservice-customer
+  ports:
+    - protocol: TCP
+      port: 8103
+      targetPort: 8103
+      name: customer-api
+  type: ClusterIP
+      

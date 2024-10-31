@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME3}
+  main:
+    banner-mode: off
+  cloud:
+    config:
+      uri: ${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
+    gateway:
+      routes:
+        - id: ${GATEWAY_ROUTE_ID1}
+          uri: ${GATEWAY_ROUTE_URI1}
+          predicates:
+            - Path=/api-security/**
+
+        - id: ${GATEWAY_ROUTE_ID2}
+          uri: ${GATEWAY_ROUTE_URI2}
+          predicates:
+            - Path=/api-customer/**
+
+        - id: ${GATEWAY_ROUTE_ID3}
+          uri: ${GATEWAY_ROUTE_URI3}
+          predicates:
+            - Path=/api-bank-account/**
+
+        - id: ${GATEWAY_ROUTE_ID4}
+          uri: ${GATEWAY_ROUTE_URI4}
+          predicates:
+            - Path=/api-operation/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowed-headers: "*"
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
+
+server:
+  address: localhost
+  port: 8101

@@ -1,0 +1,1 @@
+create database if not exists security_service_users_db;

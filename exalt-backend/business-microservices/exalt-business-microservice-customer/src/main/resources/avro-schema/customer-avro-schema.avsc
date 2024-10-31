@@ -1,0 +1,64 @@
+{
+  "namespace": "fr.exalt.businessmicroservicecustomer.domain.avrobeans",
+  "name": "CustomerAvro",
+  "type": "record",
+  "fields": [
+    {
+      "name": "customerId",
+      "type": "string"
+    },
+    {
+      "name": "firstname",
+      "type": "string"
+    },
+    {
+      "name": "lastname",
+      "type": "string"
+    },
+    {
+      "name": "state",
+      "type": "string"
+    },
+    {
+      "name": "email",
+      "type": "string"
+    },
+    {
+      "name": "createdAt",
+      "type": "string"
+    },
+    {
+      "name": "address",
+      "type": {
+        "name": "AddressAvro",
+        "type": "record",
+        "fields": [
+          {
+            "name": "addressId",
+            "type": "string"
+          },
+          {
+            "name": "streetNum",
+            "type": "int"
+          },
+          {
+            "name": "streetName",
+            "type": "string"
+          },
+          {
+            "name": "poBox",
+            "type": "int"
+          },
+          {
+            "name": "city",
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

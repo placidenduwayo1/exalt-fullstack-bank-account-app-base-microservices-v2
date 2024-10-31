@@ -1,0 +1,122 @@
+# persistence volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: db-persistent-volume
+  labels:
+    app: db-persistent-volume
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/lib/mysql"
+---
+# persistence volume claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-persistent-volume-claim
+  labels:
+    app: db-persistent-volume-claim
+  namespace: exalt-ns
+spec:
+  storageClassName: manual
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500M
+---
+# database pwd
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: exalt-ns
+  name: db-credentials
+  labels:
+    app: db-credentials
+type: Opaque
+data:
+  mysql-mdp: "cm9vdA=="
+---
+# database deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-db
+  labels:
+    app: mysql-db
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-db
+  template:
+    metadata:
+      name: mysql-db
+      labels:
+        app: mysql-db
+    spec:
+      serviceAccountName: exalt-svc-account
+      containers:
+        - name: mysql-db
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              name: mysql-port
+          startupProbe:
+            tcpSocket:
+              port: mysql-port
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          readinessProbe:
+            tcpSocket:
+              port: mysql-port
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket:
+              port: mysql-port
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: mysql-mdp
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db-data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-persistent-volume-claim
+      restartPolicy: Always
+
+---
+# database service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-db
+  labels:
+    app: mysql-db
+  namespace: exalt-ns
+spec:
+  selector:
+    app: mysql-db
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+      name: mysql-port
+  type: ClusterIP

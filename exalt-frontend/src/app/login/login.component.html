@@ -1,0 +1,65 @@
+<div class="container" style="width: fit-content; padding-left: 40%; padding-top: 3%;">
+    <p-confirmDialog [style]="{width:'20wv'}"/>
+    <p-messages key="key1"/> <p-messages key="key2"/> 
+    <p-tabView>
+        <p-tabPanel header="Login">
+            <span class="pi pi-lock" style="margin-left: 10%; font-weight: bold; font-size: large;"> Log In UI</span>
+            <p-card [style]="{width: 'fit-content'}">
+                <form [formGroup]="loginForm">
+                    <div>
+                        <label for="username">Username</label><br>
+                        <input pInputText type="text" id="username" formControlName="username" />
+                        <div *ngIf="loginForm.get('username')">
+                        </div>
+                        <br />
+                    </div>
+                    <div>
+                        <label for="pwd">Password</label><br>
+                        <p-password id="pwd" formControlName="pwd" [toggleMask]="true" />
+                    </div>
+                    <br />
+                    <div class="text-center" style="margin-left: 30%;">
+                        <p-button label="sing in" (onClick)="onLogin()" [disabled]="loginForm.invalid" />
+                    </div>
+
+                </form>
+            </p-card>
+
+        </p-tabPanel>
+        <p-tabPanel header="Register">
+            <p-card [style]="{width:'fit-content'}" header="User creation UI">
+                <form [formGroup]="registerForm">
+                    <div class="p-float-label">
+                        <input pInputText id="firstname" formControlName="firstname"/>
+                        <label for="firstname">input firstname</label>
+                    </div>
+                    <br>
+                    <div class="p-float-label">
+                        <input pInputText id="lastname" formControlName="lastname"/>
+                        <label for="lastname">input lastname</label>
+                    </div>
+                    <br>
+                    <div class="p-float-label">
+                        <input pInputText type="email" id="email" formControlName="email"/>
+                        <label for="lastname">input your email</label>
+                    </div>
+                    <br>
+                    <div class="p-float-label">
+                        <p-password id="pwd" [toggleMask]="true" formControlName="pwd"/>
+                        <label for="pwd">input Password</label>
+                    </div>
+                    <br>
+                    <div class="p-float-label">
+                        <p-password id="pwd1" [toggleMask]="true" formControlName="pwd1"/>
+                        <label for="pwd1">Confirm password</label>
+                    </div>
+                    <br>
+                    <div class="text-center" style="margin-left: 30%;">
+                        <p-button label="Sign Up" (onClick)="onRegister()" [disabled]="registerForm.invalid" />
+                    </div>
+                </form>
+            </p-card>
+
+        </p-tabPanel>
+    </p-tabView>
+</div>

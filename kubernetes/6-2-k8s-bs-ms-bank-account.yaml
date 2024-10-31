@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exalt-business-microservice-bank-account
+  labels:
+    app: exalt-business-microservices-bank-account
+  namespace: exalt-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exalt-business-microservice-bank-account
+  template:
+    metadata:
+      name: exalt-business-microservice-bank-account
+      labels:
+        app: exalt-business-microservice-bank-account
+    spec:
+      serviceAccountName: exalt-svc-account
+      containers:
+        - name: exalt-business-microservice-bank-account
+          image: placidenduwayo1/exalt-business-microservice-bank-account:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8104
+              name: b-account-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exalt-business-microservice-bank-account
+  labels:
+    app: exalt-business-microservice-bank-account
+  namespace: exalt-ns
+spec:
+  selector:
+    app: exalt-business-microservice-bank-account
+  ports:
+    - protocol: TCP
+      port: 8104
+      targetPort: 8104
+      name: b-account-api
+  type: ClusterIP
+      

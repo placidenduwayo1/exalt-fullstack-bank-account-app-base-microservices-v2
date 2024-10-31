@@ -1,0 +1,21 @@
+<div style="width:80%"> 
+    <h1 style="color: green; text-align: center;" > 
+        Bank Account application base microservices  
+    </h1> 
+</div>
+<p-splitter 
+    [panelSizes]="[30, 70]" 
+    styleClass="mb-5">
+    <ng-template pTemplate>
+  
+      <p-card header="Eureka-server -> Kubernetes">
+        As we integrated kubernetes in the application, we no longer need registration service 
+          we have used before for kubernetes has its own <span style="font-weight: bold;">registration</span>  
+          and <span style="font-weight: bold;">loadbalancing</span> service 
+      </p-card>
+    </ng-template>
+    
+    <ng-template pTemplate>
+        <img ngSrc="assets/after-k8s-before-ingress.png" width="1200" height="700" alt="microservices base application demo">
+    </ng-template>
+</p-splitter>

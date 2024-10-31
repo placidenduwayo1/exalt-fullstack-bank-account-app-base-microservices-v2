@@ -1,0 +1,73 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME5}
+  main:
+    banner-mode: off
+
+  cloud:
+    config:
+      uri: ${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
+
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOSTNAME}:${DATABASE_PORT}/${DATABASE_NAME2}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+  #kafka producer part
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BROKER_HOST1}:${KAFKA_BROKER_PORT1},${KAFKA_BROKER_HOST2}:${KAFKA_BROKER_PORT2}
+      key-serializer: ${KAFKA_KEY_SERIALIZER}
+      value-serializer: ${KAFKA_VALUE_SERIALIZER}
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
+    #kafka consumer part
+    consumer:
+      bootstrap-servers: ${KAFKA_BROKER_HOST1}:${KAFKA_BROKER_PORT1},${KAFKA_BROKER_HOST2}:${KAFKA_BROKER_PORT2}
+      key-deserializer: ${KAFKA_KEY_DESERIALIZER}
+      value-deserializer: ${KAFKA_VALUE_DESERIALIZER}
+      properties:
+        specific:
+          avro:
+            reader: true
+
+    # schema registry
+    properties:
+      schema:
+        registry:
+          url: ${SCHEMA_REGISTRY_SERVER_HOST}:${SCHEMA_REGISTRY_SERVER_PORT}
+
+  #flyway
+  flyway:
+    enabled=: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    user: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+#provided public key
+rsa:
+  rsa-public-key: classpath:certificate/publicKey.pem
+
+# common properties producer /consumer
+kafka:
+  topic:
+    name: ${KAFKA_APPLICATION_TOPIC_NAME000},${KAFKA_APPLICATION_TOPIC_NAME001}
+
+# maximum message retention
+topic:
+  retention: ${KAFKA_APPLICATION_TOPIC_RETENTION}
+
+#registry service (deactivated because we use kubernetes)
+eureka:
+  client:
+    service-url:
+      defaultZone: ${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
+
+server:
+  address: localhost
+  port: 8104
