@@ -27,4 +27,5 @@ public interface InputCustomerService {
     Customer switchCustomerState(CustomerSwitchStateDto dto);
 
     Collection<Customer> getAllArchivedCustomer();
+    Customer getCustomerByEmail(String email);
 }

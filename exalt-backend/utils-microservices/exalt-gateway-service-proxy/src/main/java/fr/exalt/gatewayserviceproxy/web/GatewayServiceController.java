@@ -9,7 +9,7 @@ import java.util.Map;
 public class GatewayServiceController {
     private static final String MSG="welcome to gateway service proxy for routing user requests";
     private static final String API="gateway-api";
-    @GetMapping("")
+    @GetMapping
     public Map<String, String> welcome(){
         return Map.of(API, MSG);
     }

@@ -5,7 +5,7 @@ import fr.exalt.businessmicroservicecustomer.domain.entities.Address;
 import fr.exalt.businessmicroservicecustomer.domain.entities.Customer;
 import fr.exalt.businessmicroservicecustomer.domain.exceptions.*;
 import fr.exalt.businessmicroservicecustomer.domain.ports.output.OutputCustomerService;
-import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mapper.MapperService1;
+import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mapper.MapperService;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.AddressDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.CustomerDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.CustomerSwitchStateDto;
@@ -46,8 +46,8 @@ class InputCustomerImplTest {
             .city("Valenciennes")
             .country("france")
             .build();
-    private final Customer customer = MapperService1.fromTo(customerDto);
-    private final Address address = MapperService1.fromTo(addressDto);
+    private final Customer customer = MapperService.fromTo(customerDto);
+    private final Address address = MapperService.fromTo(addressDto);
     private final RequestDto requestDto = RequestDto.builder()
             .addressDto(addressDto)
             .customerDto(customerDto)

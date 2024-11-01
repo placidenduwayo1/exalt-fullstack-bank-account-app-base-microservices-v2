@@ -7,7 +7,7 @@ import fr.exalt.businessmicroservicecustomer.domain.finalvalues.FinalValues;
 import fr.exalt.businessmicroservicecustomer.domain.ports.input.InputCustomerService;
 import fr.exalt.businessmicroservicecustomer.domain.ports.output.KafkaProducerService;
 import fr.exalt.businessmicroservicecustomer.domain.ports.output.OutputCustomerService;
-import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mapper.MapperService1;
+import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mapper.MapperService;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.AddressDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.CustomerSwitchStateDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.RequestDto;
@@ -34,7 +34,7 @@ public class InputCustomerImpl implements InputCustomerService {
     public Customer createCustomer(RequestDto requestDto) {
 
         validateCustomerCreate(requestDto);
-        Address mappedAddress = MapperService1.fromTo(requestDto.getAddressDto());
+        Address mappedAddress = MapperService.fromTo(requestDto.getAddressDto());
         mappedAddress.setAddressId(UUID.randomUUID().toString());
         Address savedAddress = getAddress(
                 requestDto.getAddressDto().getStreetNum(),
@@ -42,18 +42,24 @@ public class InputCustomerImpl implements InputCustomerService {
                 requestDto.getAddressDto().getPoBox(),
                 requestDto.getAddressDto().getCity(),
                 requestDto.getAddressDto().getCountry());
-        Customer customer = MapperService1.fromTo(requestDto.getCustomerDto());
+        Customer customer = MapperService.fromTo(requestDto.getCustomerDto());
+
+        if(CustomerValidators.mailAlreadyTaken(getCustomerByEmail(customer.getEmail()))){
+            throw new EmailAlreadyTakenException(FinalValues.EMAIL_IS_USED);
+        }
         if (savedAddress == null) {
             savedAddress = outputCustomerService.createAddress(mappedAddress);
             customer.setAddress(savedAddress);
         }
+
+
 
         customer.setAddress(savedAddress);
         customer.setCustomerId(UUID.randomUUID().toString());
         customer.setCreatedAt(Timestamp.from(Instant.now()).toString());
         customer.setState(INITIAL_STATE);
         //call kafka producer to send customer avro to create: topic in partition 0
-        kafkaProducer.producerCustomerModelCreateEvent(MapperService1.fromCustomer(customer));
+        kafkaProducer.producerCustomerModelCreateEvent(MapperService.fromCustomer(customer));
         return customer;
     }
 
@@ -93,7 +99,7 @@ public class InputCustomerImpl implements InputCustomerService {
                 requestDto.getAddressDto().getCity(),
                 requestDto.getAddressDto().getCountry());
         if (address == null) {
-            address = outputCustomerService.createAddress(MapperService1.fromTo(requestDto.getAddressDto()));
+            address = outputCustomerService.createAddress(MapperService.fromTo(requestDto.getAddressDto()));
         }
         //field value that won't change
         customer.setCustomerId(customerId);
@@ -103,7 +109,7 @@ public class InputCustomerImpl implements InputCustomerService {
         customer.setLastname(requestDto.getCustomerDto().getLastname());
         customer.setEmail(requestDto.getCustomerDto().getEmail());
         //call kafka producer to send customer avro to update: topic in partition 1
-        kafkaProducer.producerCustomerModelUpdateEvent(MapperService1.fromCustomer(customer));
+        kafkaProducer.producerCustomerModelUpdateEvent(MapperService.fromCustomer(customer));
         return customer;
 
     }
@@ -136,7 +142,7 @@ public class InputCustomerImpl implements InputCustomerService {
         customer.setState(dto.getState());
         customer.setAddress(customer.getAddress());
         //call kafka producer to send customer avro to switch state : topic in partition 1
-        kafkaProducer.producerCustomerModelSwitchState(MapperService1.fromCustomer(customer));
+        kafkaProducer.producerCustomerModelSwitchState(MapperService.fromCustomer(customer));
         return customer;
     }
 
@@ -145,6 +151,10 @@ public class InputCustomerImpl implements InputCustomerService {
         return outputCustomerService.getAllArchivedCustomer();
     }
 
+    @Override
+    public Customer getCustomerByEmail(String email) {
+        return outputCustomerService.getCustomerByEmail(email);
+    }
 
     private void validateCustomerCreate(RequestDto requestDto) {
 

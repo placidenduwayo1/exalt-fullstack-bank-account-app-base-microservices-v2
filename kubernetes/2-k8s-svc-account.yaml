@@ -2,19 +2,19 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: exalt-svc-account
+  name: exalt-bank-account-app-sa
   labels:
-    app: exalt-svc-account
-  namespace: exalt-ns
+    app: exalt-bank-account-app-sa
+  namespace: exalt-bank-account-app-ns
 ---
 # create 'role' that will be connected to created service account
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: role-admin
+  name: exalt-bank-account-app-role-admin
   labels:
-    app: role-admin
-  namespace: exalt-ns
+    app: exalt-bank-account-app-role-admin
+  namespace: exalt-bank-account-app-ns
 rules:
   - apiGroups:
       - ""
@@ -51,15 +51,15 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: role-admin-binding
+  name: exalt-bank-account-app-role-admin-bind
   labels:
-    app: role-admin-binding
-  namespace: exalt-ns
+    app: exalt-bank-account-app-role-admin-bind
+  namespace: exalt-bank-account-app-ns
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: role-admin
+  name: exalt-bank-account-app-role-admin
 subjects:
   - kind: ServiceAccount
-    name: exalt-svc-account
-    namespace: exalt-ns
+    name: exalt-bank-account-app-sa
+    namespace: exalt-bank-account-app-ns

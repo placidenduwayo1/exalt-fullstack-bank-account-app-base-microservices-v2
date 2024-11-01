@@ -1,5 +1,6 @@
 package fr.exalt.businessmicroservicecustomer.domain.usecase;
 
+import fr.exalt.businessmicroservicecustomer.domain.entities.Customer;
 import fr.exalt.businessmicroservicecustomer.domain.entities.CustomerState;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.AddressDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.RequestDto;
@@ -51,5 +52,9 @@ public class CustomerValidators {
             }
         }
         return stateValid;
+    }
+
+    public static boolean mailAlreadyTaken(Customer customer){
+        return customer!=null;
     }
 }

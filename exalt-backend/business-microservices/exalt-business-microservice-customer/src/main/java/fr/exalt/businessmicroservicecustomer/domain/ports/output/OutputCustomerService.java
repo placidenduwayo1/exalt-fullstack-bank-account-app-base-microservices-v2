@@ -22,4 +22,5 @@ public interface OutputCustomerService {
     Customer switchCustomerStateKafkaConsumer(CustomerAvro avro);
 
     Collection<Customer> getAllArchivedCustomer();
+    Customer getCustomerByEmail(String email);
 }

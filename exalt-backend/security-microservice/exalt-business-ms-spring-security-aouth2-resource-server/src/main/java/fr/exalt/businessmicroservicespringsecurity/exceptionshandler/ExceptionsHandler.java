@@ -12,7 +12,7 @@ import java.time.Instant;
 
 @ControllerAdvice
 public class ExceptionsHandler {
-   // @ExceptionHandler(value = Exception.class)
+   @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiError> handler(Exception exception){
         ApiError error1 = ApiError.builder()
                 .errorCode(HttpStatus.UNAUTHORIZED.value())

@@ -3,7 +3,7 @@ package fr.exalt.businessmicroservicecustomer.infrastructure.adapters.input;
 import fr.exalt.businessmicroservicecustomer.domain.entities.Address;
 import fr.exalt.businessmicroservicecustomer.domain.entities.Customer;
 import fr.exalt.businessmicroservicecustomer.domain.ports.input.InputCustomerService;
-import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mapper.MapperService1;
+import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mapper.MapperService;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.AddressDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.CustomerDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.RequestDto;
@@ -124,7 +124,7 @@ class CustomerControllerTest {
                 .addressDto(addressDto)
                 .customerDto(customerDto)
                 .build();
-        Customer customer = MapperService1.fromTo(customerDto);
+        Customer customer = MapperService.fromTo(customerDto);
         final String id ="1";
         //EXECUTE
         when(mock.updateCustomer(id,dto)).thenReturn(customer);
