@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
         mappedUser.setCreatedAt(Instant.now().toString());
         mappedUser.setUsername(username);
         mappedUser.setPwd(passwordEncoder.encode(userDto.getPwd()));
-        mappedUser.setUserId(1L);
         return userRepository.save(mappedUser);
     }
 

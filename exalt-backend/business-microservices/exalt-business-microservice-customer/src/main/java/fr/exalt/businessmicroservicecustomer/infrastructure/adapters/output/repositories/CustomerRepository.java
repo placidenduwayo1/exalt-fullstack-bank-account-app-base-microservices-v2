@@ -14,4 +14,6 @@ public interface CustomerRepository extends JpaRepository<CustomerModel, String>
     Collection<CustomerModel> findAllCustomer();
     @Query(value = "select * from customers where customers.state='archive'", nativeQuery = true)
     Collection<CustomerModel> findAllArchivedCustomers();
+    @Query(value = "select * from customers c where c.email=:email", nativeQuery = true)
+    CustomerModel findCustomerByEmail(@Param("email") String email);
 }

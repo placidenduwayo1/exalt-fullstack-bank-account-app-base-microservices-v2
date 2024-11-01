@@ -6,7 +6,7 @@ spring:
 
   cloud:
     config:
-      uri: ${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
+      uri: http://${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
 
   datasource:
     url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME1}
@@ -14,13 +14,9 @@ spring:
     password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    baseline-version: 0
-    user: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
-
+  jpa:
+    hibernate:
+      ddl-auto: update
 rsa:
   public-key: ${PUBLIC_KEY}
   private-key: ${PRIVATE_KEY}
@@ -28,7 +24,7 @@ rsa:
 eureka:
   client:
     service-url:
-      defaultZone: ${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
+      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
 
 server:
-  port: ${SERVER_PORT}
+  port: ${SERVER_PORT4}

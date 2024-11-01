@@ -2,7 +2,7 @@ package fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.ser
 
 import fr.exalt.businessmicroservicecustomer.domain.entities.Address;
 import fr.exalt.businessmicroservicecustomer.domain.entities.Customer;
-import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mapper.MapperService1;
+import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mapper.MapperService;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.AddressDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.dtos.CustomerDto;
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.entities.AddressModel;
@@ -82,7 +82,7 @@ class OutputCustomerServiceImplTest {
         //EXECUTE
        when(mock2.save(any(AddressModel.class))).thenReturn(addressModel);
        when(mock1.save(any(CustomerModel.class))).thenReturn(customerModel);
-       Request actual = underTest.createCustomerKafkaConsumer(MapperService1.fromCustomer(customer));
+       Request actual = underTest.createCustomerKafkaConsumer(MapperService.fromCustomer(customer));
         //VERIFY
         assertAll("",()->{
            verify(mock2, atLeast(1)).save(any(AddressModel.class));
@@ -137,7 +137,7 @@ class OutputCustomerServiceImplTest {
                     model.setAddress(addressModel);
                     return model;
                 })
-                .map(MapperService1::fromTo)
+                .map(MapperService::fromTo)
                 .toList();
         //EXECUTE
         when(mock1.findAllCustomer()).thenReturn(models);
@@ -177,7 +177,7 @@ class OutputCustomerServiceImplTest {
     @Test
     void createAddress() {
         //PREPARE
-        Address addr = MapperService1.fromTo(addressModel);
+        Address addr = MapperService.fromTo(addressModel);
         //EXECUTE
         when(mock2.save(any(AddressModel.class))).thenReturn(addressModel);
         Address actual = underTest.createAddress(addr);
@@ -247,7 +247,7 @@ class OutputCustomerServiceImplTest {
         //EXECUTE
         when(mock1.save(any(CustomerModel.class))).thenReturn(customerModel);
         when(mock2.save(any(AddressModel.class))).thenReturn(addressModel);
-        Request actual = underTest.updateCustomerKafkaConsumer(MapperService1.fromCustomer(c));
+        Request actual = underTest.updateCustomerKafkaConsumer(MapperService.fromCustomer(c));
         //VERIFY
         assertAll("",()->{
             verify(mock2, atLeast(1)).save(any(AddressModel.class));
@@ -259,7 +259,7 @@ class OutputCustomerServiceImplTest {
     @Test
     void updateAddress() {
         //PREPARE
-        Address a = MapperService1.fromTo(addressModel);
+        Address a = MapperService.fromTo(addressModel);
         //EXECUTE
         when(mock2.save(any(AddressModel.class))).thenReturn(addressModel);
         Address actual = underTest.updateAddress(a);

@@ -13,11 +13,11 @@ import java.time.Instant;
 @ControllerAdvice
 public class CustomerExceptionsHandler {
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<ApiErrorDto> handleBusinessException (Exception exception){
+    public ResponseEntity<ApiErrorDto> handleBusinessException(Exception exception) {
 
         ApiErrorDto apiErrorDto1 = ApiErrorDto.builder()
-                .errorCode(HttpStatus.PRECONDITION_FAILED.value())
-                .errorType(HttpStatus.PRECONDITION_FAILED.name())
+                .errorCode(HttpStatus.FORBIDDEN.value())
+                .errorType(HttpStatus.FORBIDDEN.name())
                 .timestamp(Timestamp.from(Instant.now()))
                 .build();
         ApiErrorDto apiErrorDto2 = ApiErrorDto.builder()
@@ -32,31 +32,40 @@ public class CustomerExceptionsHandler {
                 .build();
 
         switch (exception) {
-           case CustomerNotFoundException e -> {
-               apiErrorDto3.setMessage(e.getMessage());
-               return new ResponseEntity<>(apiErrorDto3, HttpStatus.NOT_FOUND);
-           }
-           case CustomerOneOrMoreFieldsInvalidException e -> {
-               apiErrorDto2.setMessage(e.getMessage());
-               return new ResponseEntity<>(apiErrorDto1, HttpStatus.BAD_REQUEST);
-           }
-           case CustomerStateInvalidException e -> {
-               apiErrorDto1.setMessage(e.getMessage());
-               return new ResponseEntity<>(apiErrorDto1, HttpStatus.PRECONDITION_FAILED);
-           }
-           case CustomerAlreadyExistsException e -> {
-               apiErrorDto1.setMessage(e.getMessage());
-               return new ResponseEntity<>(apiErrorDto1, HttpStatus.PRECONDITION_FAILED);
-           }
+            case CustomerNotFoundException e -> {
+                apiErrorDto3.setMessage(e.getMessage());
+                return new ResponseEntity<>(apiErrorDto3, HttpStatus.NOT_FOUND);
+            }
+            case CustomerOneOrMoreFieldsInvalidException e -> {
+                apiErrorDto2.setMessage(e.getMessage());
+                return new ResponseEntity<>(apiErrorDto1, HttpStatus.BAD_REQUEST);
+            }
+            case CustomerStateInvalidException e -> {
+                apiErrorDto2.setMessage(e.getMessage());
+                return new ResponseEntity<>(apiErrorDto1, HttpStatus.BAD_REQUEST);
+            }
+            case CustomerAlreadyExistsException e -> {
+                apiErrorDto1.setMessage(e.getMessage());
+                return new ResponseEntity<>(apiErrorDto1, HttpStatus.FORBIDDEN);
+            }
+            case AddressNotFoundException e -> {
+                apiErrorDto3.setMessage(e.getMessage());
+                return new ResponseEntity<>(apiErrorDto1, HttpStatus.NOT_FOUND);
+            }
+            case EmailAlreadyTakenException e -> {
+                apiErrorDto1.setMessage(e.getMessage());
+                return new ResponseEntity<>(apiErrorDto1, HttpStatus.FORBIDDEN);
+            }
+            default -> {
+                ApiErrorDto defaultError = ApiErrorDto.builder()
+                        .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .errorType(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .timestamp(Timestamp.from(Instant.now()))
+                        .message(exception.getMessage())
+                        .build();
 
-           case AddressNotFoundException e -> {
-               apiErrorDto3.setMessage(e.getMessage());
-               return new ResponseEntity<>(apiErrorDto1, HttpStatus.NOT_FOUND);
-           }
-           default ->{
-               apiErrorDto1.setMessage(exception.getMessage());
-               return new ResponseEntity<>(apiErrorDto1, HttpStatus.PRECONDITION_FAILED);
-           }
-       }
+                return new ResponseEntity<>(defaultError, HttpStatus.PRECONDITION_FAILED);
+            }
+        }
     }
 }

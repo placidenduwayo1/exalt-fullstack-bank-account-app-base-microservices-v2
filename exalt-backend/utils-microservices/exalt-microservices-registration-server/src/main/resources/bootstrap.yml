@@ -7,5 +7,4 @@ spring:
     config:
       uri: http://${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
 server:
-  address: localhost
-  port: 8761
+  port: ${SERVER_PORT2}

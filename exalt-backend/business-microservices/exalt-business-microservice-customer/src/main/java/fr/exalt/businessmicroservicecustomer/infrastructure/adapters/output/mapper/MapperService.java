@@ -10,8 +10,8 @@ import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.mode
 import fr.exalt.businessmicroservicecustomer.infrastructure.adapters.output.models.entities.CustomerModel;
 import org.springframework.beans.BeanUtils;
 
-public class MapperService1 {
-    private MapperService1() {}
+public class MapperService {
+    private MapperService() {}
     public static AddressModel fromTo(Address address){
         AddressModel model = AddressModel.builder().build();
         BeanUtils.copyProperties(address,model);

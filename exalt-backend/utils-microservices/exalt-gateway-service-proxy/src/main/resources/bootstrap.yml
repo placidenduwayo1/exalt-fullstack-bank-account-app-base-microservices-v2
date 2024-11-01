@@ -5,7 +5,7 @@ spring:
     banner-mode: off
   cloud:
     config:
-      uri: ${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
+      uri: http://${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
     gateway:
       routes:
         - id: ${GATEWAY_ROUTE_ID1}
@@ -38,8 +38,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
+      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
 
 server:
-  address: localhost
-  port: 8101
+  port: ${SERVER_PORT3}

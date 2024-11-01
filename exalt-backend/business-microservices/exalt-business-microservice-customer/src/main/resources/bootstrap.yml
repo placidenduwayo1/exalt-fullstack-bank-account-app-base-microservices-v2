@@ -6,18 +6,16 @@ spring:
 
   cloud:
     config:
-      uri: ${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
+      uri: http://${CONFIGURATION_SERVER_HOST}:${CONFIGURATION_SERVER_PORT}
 
   datasource:
-    url: jdbc:mysql://${DATABASE_HOSTNAME}:${DATABASE_PORT}/${DATABASE_NAME3}
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME3}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
 
-  #kafka producer part
-  #kafka producer part
   kafka:
     producer:
-      bootstrap-servers: ${KAFKA_BROKER_HOST1}:${KAFKA_BROKER_PORT1},${KAFKA_BROKER_HOST2}:${KAFKA_BROKER_PORT2}
+      bootstrap-servers: http://kafka-server1:19092,http://kafka-server2:29092
       key-serializer: ${KAFKA_KEY_SERIALIZER}
       value-serializer: ${KAFKA_VALUE_SERIALIZER}
       properties:
@@ -26,11 +24,8 @@ spring:
             add:
               type:
                 headers: false
-
-    #kafka consumer part
-    #kafka consumer part
     consumer:
-      bootstrap-servers: ${KAFKA_BROKER_HOST1}:${KAFKA_BROKER_PORT1},${KAFKA_BROKER_HOST2}:${KAFKA_BROKER_PORT2}
+      bootstrap-servers: http://kafka-server1:19092,http://kafka-server2:29092
       key-deserializer: ${KAFKA_KEY_DESERIALIZER}
       value-deserializer: ${KAFKA_VALUE_DESERIALIZER}
       properties:
@@ -38,14 +33,11 @@ spring:
           avro:
             reader: true
 
-    # schema registry
-    # schema registry
     properties:
       schema:
         registry:
-          url: ${SCHEMA_REGISTRY_SERVER_HOST}:${SCHEMA_REGISTRY_SERVER_PORT}
+          url: http://schema-registry-service:8081
 
-  #flyway
   flyway:
     enabled=: true
     baseline-on-migrate: true
@@ -53,16 +45,13 @@ spring:
     user: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
 
-#provided public key
 rsa:
-  rsa-public-key: classpath:certificate/publicKey.pem
+  rsa-public-key: ${PUBLIC_KEY}
 
-# common properties producer /consumer
 kafka:
   topic:
     name: ${KAFKA_APPLICATION_TOPIC_NAME010}
 
-# maximum message retention
 topic:
   retention: ${KAFKA_APPLICATION_TOPIC_RETENTION}
 
@@ -70,8 +59,7 @@ topic:
 eureka:
   client:
     service-url:
-      defaultZone: ${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
+      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
 
 server:
-  address: localhost
-  port: 8103
+  port: ${SERVER_PORT6}
