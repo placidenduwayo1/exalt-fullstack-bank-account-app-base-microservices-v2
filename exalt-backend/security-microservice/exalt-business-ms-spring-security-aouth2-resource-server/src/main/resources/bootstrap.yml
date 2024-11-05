@@ -21,10 +21,5 @@ rsa:
   public-key: ${PUBLIC_KEY}
   private-key: ${PRIVATE_KEY}
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
-
 server:
   port: ${SERVER_PORT4}

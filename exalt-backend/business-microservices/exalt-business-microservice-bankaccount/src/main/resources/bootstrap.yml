@@ -13,9 +13,12 @@ spring:
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
 
-  jpa:
-    hibernate:
-      ddl-auto: update
+  flyway:
+    enabled=: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    user: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   kafka:
     producer:
@@ -51,12 +54,6 @@ kafka:
 
 topic:
   retention: ${KAFKA_APPLICATION_TOPIC_RETENTION}
-
-#registry service (deactivated because we use kubernetes)
-eureka:
-  client:
-    service-url:
-      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
 
 server:
   port: ${SERVER_PORT5}

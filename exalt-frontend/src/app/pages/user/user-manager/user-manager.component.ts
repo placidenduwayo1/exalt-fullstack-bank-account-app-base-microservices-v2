@@ -27,6 +27,7 @@ export class UserManagerComponent implements OnInit {
       this.activatedRoute.data.subscribe({
         next: ({ allUsers }) => {
           this.users = allUsers;
+          console.log(this.users);
           return this.users;
         },
         error: () => {

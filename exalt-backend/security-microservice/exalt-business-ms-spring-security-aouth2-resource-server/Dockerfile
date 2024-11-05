@@ -10,8 +10,6 @@ ARG DATABASE_USERNAME
 ARG DATABASE_PASSWORD
 ARG PUBLIC_KEY
 ARG PRIVATE_KEY
-ARG SERVICES_REGISTRY_SERVER_HOST
-ARG SERVICES_REGISTRY_SERVER_PORT
 
 ENV APPLICATION_NAME4=${APPLICATION_NAME4}
 ENV SERVER_PORT4=${SERVER_PORT4}
@@ -24,8 +22,6 @@ ENV DATABASE_USERNAME=${DATABASE_USERNAME}
 ENV DATABASE_PASSWORD=${DATABASE_PASSWORD}
 ENV PUBLIC_KEY=${PUBLIC_KEY}
 ENV PRIVATE_KEY=${PRIVATE_KEY}
-ENV SERVICES_REGISTRY_SERVER_HOST=${SERVICES_REGISTRY_SERVER_HOST}
-ENV SERVICES_REGISTRY_SERVER_PORT=${SERVICES_REGISTRY_SERVER_PORT}
 
 WORKDIR /build/
 COPY pom.xml /build/
@@ -40,5 +36,5 @@ COPY --from=builder /build/target/spring-boot-loader/ ./
 COPY --from=builder /build/target/snapshot-dependencies/ ./
 COPY --from=builder /build/target/application/ ./
 
-EXPOSE 8102
-ENTRYPOINT ["java", "-Dspring.profiles.active=integ", "org.springframework.boot.loader.launch.JarLauncher"]
+EXPOSE ${ SERVER_PORT4}
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

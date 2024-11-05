@@ -23,7 +23,7 @@ metadata:
   name: db-persistent-volume-claim
   labels:
     app: db-persistent-volume-claim
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   storageClassName: manual
   volumeMode: Filesystem
@@ -37,7 +37,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
   name: db-credentials
   labels:
     app: db-credentials
@@ -49,24 +49,24 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-db
+  name: bank-account-app-apis-dbs
   labels:
-    app: mysql-db
-  namespace: exalt-ns
+    app: bank-account-app-apis-dbs
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql-db
+      app: bank-account-app-apis-dbs
   template:
     metadata:
-      name: mysql-db
+      name: bank-account-app-apis-dbs
       labels:
-        app: mysql-db
+        app: bank-account-app-apis-dbs
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       containers:
-        - name: mysql-db
+        - name: bank-account-app-apis-dbs
           image: mysql:8.0
           imagePullPolicy: IfNotPresent
           ports:
@@ -107,13 +107,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-db
+  name: bank-account-app-apis-dbs
   labels:
-    app: mysql-db
-  namespace: exalt-ns
+    app: bank-account-app-apis-dbs
+  namespace: exalt-bank-account-app-ns
 spec:
   selector:
-    app: mysql-db
+    app: bank-account-app-apis-dbs
   ports:
     - port: 3306
       protocol: TCP

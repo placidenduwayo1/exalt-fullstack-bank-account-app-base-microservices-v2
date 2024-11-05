@@ -37,6 +37,7 @@ spring:
       schema:
         registry:
           url: http://schema-registry-service:8081
+
   flyway:
     enabled=: true
     baseline-on-migrate: true
@@ -54,13 +55,6 @@ kafka:
 
 topic:
   retention: ${KAFKA_APPLICATION_TOPIC_RETENTION}
-
-#registry service (deactivated because we use kubernetes)
-eureka:
-  client:
-    service-url:
-      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
-
 
 server:
   port: ${SERVER_PORT7}

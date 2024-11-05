@@ -30,9 +30,9 @@ export class OperationService {
     }
 
     getAllDepositOperation(): Observable<BankAccount[]> {
-        return this.httpClient.get<BankAccount[]>(`${this.operationApi}/operations/deposit`)
+        return this.httpClient.get<BankAccount[]>(`${this.operationApi}/operations/deposits`)
             .pipe(
-                tap((data: BankAccount[]) => {
+                tap(() => {
                     console.log('do operation with uploaded data')
                 })
             )
@@ -40,7 +40,7 @@ export class OperationService {
     getAllWithdrawalsOperation(): Observable<BankAccount[]> {
         return this.httpClient.get<BankAccount[]>(`${this.operationApi}/operations/withdrawals`)
         .pipe(
-            tap((data: BankAccount[]) => {
+            tap(()=> {
                 console.log('do operation with uploaded data')
             })
         );
