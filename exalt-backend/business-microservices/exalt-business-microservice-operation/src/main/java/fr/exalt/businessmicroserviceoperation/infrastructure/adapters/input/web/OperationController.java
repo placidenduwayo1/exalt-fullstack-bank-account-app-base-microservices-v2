@@ -42,7 +42,7 @@ public class OperationController {
     public ResponseEntity<Collection<TransferOperation>> getAllTransfer(){
         return new ResponseEntity<>(inputOperationService.getAllTransfer(), HttpStatus.OK);
     }
-    @GetMapping(value = "/operations/deposit")
+    @GetMapping(value = "/operations/deposits")
     public ResponseEntity<Collection<Operation>> getAllDepositOperation(){
         return new ResponseEntity<>(inputOperationService.getAllDepositOperation(), HttpStatus.OK);
     }

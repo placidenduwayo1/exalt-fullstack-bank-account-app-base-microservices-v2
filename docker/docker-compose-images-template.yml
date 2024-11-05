@@ -158,31 +158,6 @@ services:
       CLOUD_CONFIG_SERVER_GIT_USERNAME: ${CLOUD_CONFIG_SERVER_GIT_USERNAME}
       CLOUD_CONFIG_SERVER_GIT_PASSWORD: ${CLOUD_CONFIG_SERVER_GIT_PASSWORD}
 
-  exalt-microservices-registration-server:
-    image: placidenduwayo1/${APPLICATION_NAME2}:1.0.0
-    container_name: ${APPLICATION_NAME2}
-    build:
-      context: ../exalt-backend/utils-microservices/exalt-microservices-registration-server
-      dockerfile: Dockerfile
-    ports:
-      - ${SERVER_PORT2}:${SERVER_PORT2}
-    networks:
-      - bank-account-apis
-    healthcheck:
-      test: [ "CMD", "curl", "-I", "http://${APPLICATION_NAME2}:${SERVER_PORT2}" ]
-      interval: 15s
-      timeout: 10s
-      retries: 3
-    restart: no
-    environment:
-      APPLICATION_NAME2: ${APPLICATION_NAME2}
-      SERVER_PORT2: ${SERVER_PORT2}
-      CONFIGURATION_SERVER_HOST: ${CONFIGURATION_SERVER_HOST}
-      CONFIGURATION_SERVER_PORT: ${CONFIGURATION_SERVER_PORT}
-    depends_on:
-      exalt-microservices-configuration-server:
-        condition: service_healthy
-
   exalt-gateway-service-proxy:
     image: placidenduwayo1/${APPLICATION_NAME3}:1.0.0
     container_name: ${APPLICATION_NAME3}
@@ -210,8 +185,6 @@ services:
       GATEWAY_ROUTE_URI3: ${GATEWAY_ROUTE_URI3}
       GATEWAY_ROUTE_ID4: ${GATEWAY_ROUTE_ID4}
       GATEWAY_ROUTE_URI4: ${GATEWAY_ROUTE_URI4}
-      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
-      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
 
 #  ## spring security microservice
   exalt-business-ms-spring-security-aouth2-res-server:
@@ -242,8 +215,6 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       PUBLIC_KEY: ${PUBLIC_KEY}
       PRIVATE_KEY: ${PRIVATE_KEY}
-      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
-      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
 
 ## business microservices: customer, bank-account, operation
   exalt-business-microservice-customer:
@@ -283,8 +254,6 @@ services:
       PUBLIC_KEY: ${PUBLIC_KEY}
       KAFKA_APPLICATION_TOPIC_NAME010: ${KAFKA_APPLICATION_TOPIC_NAME010}
       KAFKA_APPLICATION_TOPIC_RETENTION: ${KAFKA_APPLICATION_TOPIC_RETENTION}
-      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
-      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
 
   exalt-business-microservice-bank-account:
     image: placidenduwayo1/${APPLICATION_NAME5}:1.0.0
@@ -324,8 +293,6 @@ services:
       KAFKA_APPLICATION_TOPIC_NAME000: ${KAFKA_APPLICATION_TOPIC_NAME000}
       KAFKA_APPLICATION_TOPIC_NAME001: ${KAFKA_APPLICATION_TOPIC_NAME001}
       KAFKA_APPLICATION_TOPIC_RETENTION: ${KAFKA_APPLICATION_TOPIC_RETENTION}
-      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
-      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
 
   exalt-business-microservice-operation:
     image: placidenduwayo1/${APPLICATION_NAME7}:1.0.0
@@ -365,21 +332,19 @@ services:
       KAFKA_APPLICATION_TOPIC_NAME011: ${KAFKA_APPLICATION_TOPIC_NAME011}
       KAFKA_APPLICATION_TOPIC_NAME100: ${KAFKA_APPLICATION_TOPIC_NAME100}
       KAFKA_APPLICATION_TOPIC_RETENTION: ${KAFKA_APPLICATION_TOPIC_RETENTION}
-      SERVICES_REGISTRY_SERVER_HOST: ${SERVICES_REGISTRY_SERVER_HOST}
-      SERVICES_REGISTRY_SERVER_PORT: ${SERVICES_REGISTRY_SERVER_PORT}
 
-#  # frontend angular application
-#  exalt-bank-account-angular-app:
-#    image: placidenduwayo1/exalt-bank-account-angular-app:1.0.0
-#    container_name: exalt-bank-account-angular-app
-#    build:
-#       context: ./exalt-frontend
-#       dockerfile: Dockerfile
-#    ports:
-#      - 4200:80
-#    networks:
-#      - bank-account-apis
-#    restart: no
+#------------- frontend angular application
+  exalt-bank-account-angular-app:
+    image: placidenduwayo1/exalt-bank-account-angular-app:1.0.0
+    container_name: exalt-bank-account-app-frontend-angular
+    build:
+       context: ../exalt-frontend
+       dockerfile: Dockerfile
+    ports:
+      - 4200:80
+    networks:
+      - bank-account-apis
+    restart: no
 
 networks:
   bank-account-apis:

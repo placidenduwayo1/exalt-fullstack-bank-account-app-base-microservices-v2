@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { OperationRoutingModule } from './operation-routing.module';
 import { OperationManagerComponent } from './operation-manager/operation-manager.component';
-import { OperationsListComponent } from './operation-manager/operations-list/operations-list.component';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
@@ -17,6 +16,7 @@ import { TransferListComponent } from './operation-manager/transfer-list/transfe
 import { TransfersComponent } from './operation-manager/transfer-list/transfers/transfers.component';
 import { DepositOperationComponent } from './operation-manager/deposit-operation/deposit-operation.component';
 import { WithdrawalOperationComponent } from './operation-manager/withdrawal-operation/withdrawal-operation.component';
+import { OperationsListComponent } from './operation-manager/operations-list/operations-list.component';
 
 
 @NgModule({

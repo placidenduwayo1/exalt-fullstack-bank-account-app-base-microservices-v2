@@ -35,10 +35,5 @@ spring:
             allowed-headers: "*"
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/
-
 server:
   port: ${SERVER_PORT3}

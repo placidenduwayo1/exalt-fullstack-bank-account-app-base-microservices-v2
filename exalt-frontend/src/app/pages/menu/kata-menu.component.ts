@@ -51,6 +51,7 @@ export class KataMenuComponent {
   sideBarPisition: string = "right";
   usersListSidebarVisible: boolean = false;
   roles!: any[];
+  roleModels: any[] = [];
 
   ngOnInit(): void {
 
@@ -211,12 +212,8 @@ export class KataMenuComponent {
         label: 'api-operations', icon: 'pi pi-server',
         items: [
           {
-            label: 'depot/retrait', icon: 'pi pi-list',
+            label: 'all-operations', icon: 'pi pi-list',
             command: () => this.router.navigateByUrl('session/operations')
-          },
-          {
-            label: 'transfert', icon: 'pi pi-list',
-            command: () => this.router.navigateByUrl('session/operations/transfers')
           },
           {
             label: 'deposits', icon: 'pi pi-list',
@@ -225,6 +222,10 @@ export class KataMenuComponent {
           {
             label: 'withdrawals', icon: 'pi pi-list',
             command: () => this.router.navigateByUrl('session/operations/withdrawal')
+          },
+          {
+            label: 'transfert', icon: 'pi pi-list',
+            command: () => this.router.navigateByUrl('session/operations/transfers')
           }
         ],
         visible: this.highlyAuthorized

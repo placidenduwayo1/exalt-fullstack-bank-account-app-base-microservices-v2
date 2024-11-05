@@ -5,7 +5,7 @@ metadata:
   name: zookeeper-server
   labels:
     app: zookeeper-server
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
       labels:
         app: zookeeper-server
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       containers:
         - name: zookeeper-server
           image: zookeeper:3.4.9
@@ -34,7 +34,7 @@ metadata:
   name: zookeeper-server
   labels:
     app: zookeeper-server
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   selector:
     app: zookeeper-server
@@ -45,6 +45,7 @@ spec:
       name: zookeeper-port
   type: ClusterIP
 ---
+
 # kafka servers
 apiVersion: apps/v1
 kind: Deployment
@@ -52,7 +53,7 @@ metadata:
   name: kafka-server
   labels:
     app: kafka-server
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 2
   selector:
@@ -64,14 +65,14 @@ spec:
       labels:
         app: kafka-server
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       initContainers:
         - name: zookeeper
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -zooker-server 2181; do echo waiting for zookeeper-server ready; sleep 5; done;'
+            - 'until nc -z zookeeper-server 2181; do echo waiting for zookeeper-server ready; sleep 5; done;'
       containers:
         - name: kafka-server
           image: obsidiandynamics/kafka
@@ -99,6 +100,7 @@ spec:
       name: kafka-port
   type: ClusterIP
 ---
+
 # schema registry
 apiVersion: apps/v1
 kind: Deployment
@@ -106,7 +108,7 @@ metadata:
   name: schema-registry-service
   labels:
     app: schema-registry-service
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
@@ -118,14 +120,14 @@ spec:
       labels:
         app: schema-registry-service
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       initContainers:
-        - name: zookeeper
+        - name: kafka
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
+            - 'until nc -z kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
       containers:
         - name: schema-registry-service
           image: confluentinc/cp-schema-registry:5.4.0
@@ -160,7 +162,7 @@ metadata:
   name: kafka-UI
   labels:
     app: kafka-UI
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
@@ -172,14 +174,14 @@ spec:
       labels:
         app: kafka-UI
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       initContainers:
-        - name: zookeeper
+        - name: kafka
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
+            - 'until nc -z kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
       containers:
         - name: kafka-UI
           image: provectuslabs/kafka-ui:latest
@@ -205,7 +207,7 @@ metadata:
   name: kafka-UI
   labels:
     app: kafka-UI
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   selector:
     app: kafka-UI
@@ -215,5 +217,3 @@ spec:
       targetPort: 8080
       name: kafka-ui-port
   type: ClusterIP
-
-      

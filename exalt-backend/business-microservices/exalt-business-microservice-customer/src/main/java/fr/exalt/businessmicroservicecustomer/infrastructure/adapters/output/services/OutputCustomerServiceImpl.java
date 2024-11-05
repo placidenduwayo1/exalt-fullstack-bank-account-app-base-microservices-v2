@@ -140,9 +140,11 @@ public class OutputCustomerServiceImpl implements OutputCustomerService {
         CustomerModel savedCustomer = customerRepository.findById(customer.getCustomerId()).orElseThrow(
                 () -> new CustomerNotFoundException(FinalValues.CUSTOMER_NOT_FOUND));
         AddressModel savedAddress = savedCustomer.getAddress();
-        CustomerModel model = customerRepository.save(MapperService.fromTo(customer));
-        model.setAddress(savedAddress);
-        return MapperService.fromTo(model);
+
+        CustomerModel customerModel = MapperService.fromTo(customer);
+        customerModel.setAddress(savedAddress);
+        customerRepository.save(customerModel);
+        return MapperService.fromTo(customerModel);
     }
 
     @Override
