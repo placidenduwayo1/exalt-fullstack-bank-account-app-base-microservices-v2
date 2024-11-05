@@ -5,7 +5,7 @@ pipeline {
         jdk 'Java-21'
     }
     stages {
-        stage ('Stage: Build'){
+        stage ('Stage:Build'){
             steps{
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/placidenduwayo1/exalt-fullstack-bank-account-app-base-microservices-v2.git']])
                 dir('./exalt-backend/business-microservices/'){
@@ -43,9 +43,8 @@ pipeline {
                     }
                 }
             }
-
         }
-        stage ('Stage: Unit Test'){
+        stage ('Stage:Unit Test'){
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/placidenduwayo1/k8s-ingress-kafka-avro-back.git']])
                 echo 'starting run unit test'
@@ -70,7 +69,7 @@ pipeline {
                 }
             }
         }
-        stage ('Stage: Build docker images'){
+        stage ('Stage:Build docker images'){
             steps {
                 echo 'Starting build docker images of the bank-account application'
                 script {
@@ -80,7 +79,7 @@ pipeline {
                 }
             }
         }
-        stage ('Stage: Publish bank-account app stack') {
+        stage ('Stage:Publish bank-account app stack') {
             steps {
                 echo 'Starting publish docker images into docker registry'
                 script {
