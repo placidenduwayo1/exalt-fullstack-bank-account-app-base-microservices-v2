@@ -12,20 +12,20 @@
         loadingIcon="pi pi-star pi-spin" (onPage)="onTablePageChange($event)" [first]="first">
         <ng-template pTemplate="header">
             <tr>
-                <th>Account ID<br>
+                <th scope="col">Account ID<br>
                     <span class="p-input-icon-left ml-auto">
                         <i class="pi pi-search"></i>
                         <input pInputText (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                             placeholder="search" size="5" />
                     </span>
                 </th>
-                <th pSortableColumn="type">Type<p-sortIcon field="type" /></th>
-                <th>State</th>
-                <th pSortableColumn="balance">Balance<p-sortIcon field="balance" /></th>
-                <th>Overdraft / I Rate</th>
-                <th pSortableColumn="createdAt">Creation date<p-sortIcon field="createdAt" /> </th>
-                <th>Customer</th>
-                <th pSortableColumn="customer.lastname">Customer name <p-sortIcon field="customer.lastname"/> <br>
+                <th scope="col" pSortableColumn="type">Type<p-sortIcon field="type" /></th>
+                <th scope="col">State</th>
+                <th scope="col" pSortableColumn="balance">Balance<p-sortIcon field="balance" /></th>
+                <th scope="col">Overdraft / I Rate</th>
+                <th scope="col" pSortableColumn="createdAt">Creation date<p-sortIcon field="createdAt" /> </th>
+                <th scope="col">Customer</th>
+                <th scope="col">Customer name<br>
                     <span class="p-input-icon-left ml-auto">
                         <i class="pi pi-search"></i>
                         <input pInputText (input)="dt.filterGlobal($any($event.target).value, 'contains')"

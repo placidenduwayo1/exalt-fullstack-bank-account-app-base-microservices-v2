@@ -11,12 +11,12 @@
         (onPage)="onTablePageChange($event)" [first]="first">
         <ng-template pTemplate="header">
             <tr>
-                <th>ID</th>
-                <th pSortableColumn="username">username <p-sortIcon field="username" /> </th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Created Date</th>
-                <th>Roles</th>
+                <th scope="col">ID</th>
+                <th scope="col" pSortableColumn="username">username <p-sortIcon field="username" /> </th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Roles</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
@@ -27,17 +27,17 @@
                 <td> {{user.email}} </td>
                 <td> {{user.createdAt | date:'medium'}} </td>
                 <td>
-                    <ng-container *ngFor="let roleModel of user.roleModels">
-                        {{roleModel.roleName}}
+                    <ng-container *ngFor="let role of user.roles">
+                        {{role.roleName}}
                     </ng-container>
                 </td>
                 <td>
                     <p-button icon="pi pi-window-maximize" size="small" [rounded]="true" [text]="true"
-                        pTooltip="add roleModel" tooltipPosition="left" (onClick)="onLoadUser(user);addButtonClicked();
+                        pTooltip="add role" tooltipPosition="left" (onClick)="onLoadUser(user);addButtonClicked();
                         userRoleSidebarVisible=true" severity="success" />
 
                     <p-button icon="pi pi-window-maximize" size="small" [rounded]="true" [text]="true" severity="danger"
-                        pTooltip="remove roleModel" tooltipPosition="left"
+                        pTooltip="remove role" tooltipPosition="left"
                         (onClick)=" onLoadUser(user);removeButtonClicked(); userRoleSidebarVisible=true" />
 
                     <p-button icon="pi pi-window-maximize" size="small" [rounded]="true" [text]="true"
