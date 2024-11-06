@@ -14,7 +14,7 @@ pipeline {
                 }
             }
             post {
-                //#------------------- publishing artefacts ----------------
+                echo '------------------- publishing artefacts ----------------'
                 success {
                     dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
                         archiveArtifacts '**/target/*.jar'
@@ -38,19 +38,29 @@ pipeline {
                         archiveArtifacts '**/target/*.jar'
                     }
                 }
-                //------------------- publishing test reports ----------------
+            }
+        }
+        stage('Stage: Unit Test'){
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/placidenduwayo1/exalt-fullstack-bank-account-app-base-microservices-v2.git']])
+                echo 'starting run unit test'
+                dir('./exalt-backend/business-microservices/'){
+                    sh 'mvn test'
+                }
+            }
+            post {
+                echo '------------------- publishing test reports ----------------'
                 always {
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
                        junit '**/target/surefire-reports/TEST-*.xml'
-
                    }
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-customer/'){
                        junit '**/target/surefire-reports/TEST-*.xml'
                    }
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-operation/'){
-                      junit '**/target/surefire-reports/TEST-*.xml'
+                       junit '**/target/surefire-reports/TEST-*.xml'
                    }
-                }
+                 }
             }
         }
         stage ('Stage:Build docker images'){
