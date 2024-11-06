@@ -5,6 +5,7 @@ pipeline {
         jdk 'Java-21'
     }
     stages {
+    // clean install stage
         stage ('Stage:Build'){
             steps{
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/placidenduwayo1/exalt-fullstack-bank-account-app-base-microservices-v2.git']])
@@ -13,7 +14,7 @@ pipeline {
                 }
             }
             post {
-                echo '#------------------- publishing artefacts ----------------'
+                //#------------------- publishing artefacts ----------------
                 success {
                     dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
                         archiveArtifacts '**/target/*.jar'
@@ -37,7 +38,8 @@ pipeline {
                         archiveArtifacts '**/target/*.jar'
                     }
                 }
-                echo '#------------------- publishing test reports ----------------'
+
+                //------------------- publishing test reports ----------------
                 always {
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
                        junit '**/target/surefire-reports/TEST-*.xml'
