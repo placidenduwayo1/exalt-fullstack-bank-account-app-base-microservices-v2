@@ -335,16 +335,19 @@ services:
 
 #------------- frontend angular application
   exalt-bank-account-angular-app:
-    image: placidenduwayo1/exalt-bank-account-angular-app:1.0.0
-    container_name: exalt-bank-account-app-frontend-angular
+    image: placidenduwayo1/${exalt-bank-account-app-frontend-angular}:1.0.0
+    container_name: ${exalt-bank-account-app-frontend-angular}
     build:
        context: ../exalt-frontend
        dockerfile: Dockerfile
     ports:
-      - 4200:80
+      - 4200:${SERVER_PORT8}
     networks:
       - bank-account-apis
     restart: no
+    environment:
+      APPLICATION_NAME8: ${APPLICATION_NAME8}
+      SERVER_PORT8: ${SERVER_PORT8}
 
 networks:
   bank-account-apis:
