@@ -38,6 +38,7 @@ pipeline {
                         archiveArtifacts '**/target/*.jar'
                     }
                 }
+
                 //------------------- publishing test reports ----------------
                 always {
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
