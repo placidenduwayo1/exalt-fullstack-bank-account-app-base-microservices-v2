@@ -1,6 +1,7 @@
 spring:
   application:
     name: ${APPLICATION_NAME7}
+
   main:
     banner-mode: off
 

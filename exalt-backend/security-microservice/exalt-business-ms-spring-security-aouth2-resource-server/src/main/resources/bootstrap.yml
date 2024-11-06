@@ -1,6 +1,7 @@
 spring:
   main:
     banner-mode: off
+
   application:
     name: ${APPLICATION_NAME4}
 
@@ -17,6 +18,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
 rsa:
   public-key: ${PUBLIC_KEY}
   private-key: ${PRIVATE_KEY}
