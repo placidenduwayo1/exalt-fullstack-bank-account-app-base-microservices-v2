@@ -50,6 +50,7 @@ pipeline {
                 }
             }
             post {
+               // ------------------- publishing test reports ----------------
                 always {
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
                        junit '**/target/surefire-reports/TEST-*.xml'
