@@ -5,6 +5,7 @@ pipeline {
         jdk 'Java-21'
     }
     stages {
+    // clean install stage
         stage ('Stage:Build'){
         //clean install stage
             steps{
