@@ -1,11 +1,10 @@
-# application name
 spring:
   application:
     name: ${APPLICATION_NAME1}
-  # disable banner
+
   main:
     banner-mode: off
-  # cloud config server
+
   cloud:
     config:
       server:
@@ -15,5 +14,6 @@ spring:
           search-paths: ${CLOUD_CONFIG_SERVER_GIT_PATHS}
           username: ${CLOUD_CONFIG_SERVER_GIT_USERNAME}
           password: ${CLOUD_CONFIG_SERVER_GIT_PASSWORD}
+
 server:
   port: ${SERVER_PORT1}

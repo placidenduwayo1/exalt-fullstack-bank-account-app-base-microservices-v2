@@ -1,6 +1,7 @@
 spring:
   application:
     name: ${APPLICATION_NAME6}
+
   main:
     banner-mode: off
   cloud:
