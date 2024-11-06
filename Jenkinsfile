@@ -69,9 +69,6 @@ pipeline {
                     dir('./exalt-backend/business-microservices/exalt-business-microservice-operation/'){
                        junit '**/target/surefire-reports/TEST-*.xml'
                     }
-                    dir('AEPC-Bs-Ms-Backend/k8s-ingress-kafka-avro-clean-archi-bs-ms-project/'){
-                       junit '**/target/surefire-reports/TEST-*.xml'
-                    }
                 }
             }
         }
