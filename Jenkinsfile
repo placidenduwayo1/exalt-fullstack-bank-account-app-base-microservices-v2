@@ -48,7 +48,13 @@ pipeline {
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/placidenduwayo1/k8s-ingress-kafka-avro-back.git']])
                 echo 'starting run unit test'
-                dir('./exalt-backend/business-microservices/'){
+                dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
+                    sh 'mvn test'
+                }
+                dir('./exalt-backend/business-microservices/exalt-business-microservice-customer/'){
+                    sh 'mvn test'
+                }
+                dir('./exalt-backend/business-microservices/exalt-business-microservice-operation/'){
                     sh 'mvn test'
                 }
             }
