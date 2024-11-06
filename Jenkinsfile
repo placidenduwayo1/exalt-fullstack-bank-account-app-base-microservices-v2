@@ -53,6 +53,7 @@ pipeline {
                 always {
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
                        junit '**/target/surefire-reports/TEST-*.xml'
+
                    }
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-customer/'){
                        junit '**/target/surefire-reports/TEST-*.xml'
