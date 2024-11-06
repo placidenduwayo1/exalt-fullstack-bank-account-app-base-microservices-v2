@@ -79,8 +79,7 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
-        <!--  kubernetes dependency for microservices discovery-->
+        <!--  kubernetes dependency for microservices discovery and load balance-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-kubernetes-client-all</artifactId>
