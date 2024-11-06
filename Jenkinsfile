@@ -5,6 +5,7 @@ pipeline {
         jdk 'Java-21'
     }
     stages {
+    // clean install stage
         stage ('Stage:Build'){
         //clean install stage
             steps{
@@ -49,7 +50,6 @@ pipeline {
                 }
             }
             post {
-               // ------------------- publishing test reports ----------------
                 always {
                    dir('./exalt-backend/business-microservices/exalt-business-microservice-bankaccount/'){
                        junit '**/target/surefire-reports/TEST-*.xml'
