@@ -1,4 +1,8 @@
 FROM nginx:1-alpine
 COPY dist/kata-frontend /usr/share/nginx/html
-EXPOSE 80
+ARG APPLICATION_NAME8
+ARG SERVER_PORT8
+ENV APPLICATION_NAME8=${APPLICATION_NAME8}
+ENV SERVER_PORT8=${SERVER_PORT8}
+EXPOSE ${SERVER_PORT8}
 CMD ["nginx", "-g", "daemon off;"]
