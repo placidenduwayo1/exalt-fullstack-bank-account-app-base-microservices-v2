@@ -334,9 +334,9 @@ services:
       KAFKA_APPLICATION_TOPIC_RETENTION: ${KAFKA_APPLICATION_TOPIC_RETENTION}
 
 #------------- frontend angular application
-  exalt-bank-account-angular-app:
-    image: placidenduwayo1/${exalt-bank-account-app-frontend-angular}:1.0.0
-    container_name: ${exalt-bank-account-app-frontend-angular}
+  exalt-bank-account-app-frontend-angular:
+    image: placidenduwayo1/${APPLICATION_NAME8}:1.0.0
+    container_name: ${APPLICATION_NAME8}
     build:
        context: ../exalt-frontend
        dockerfile: Dockerfile
