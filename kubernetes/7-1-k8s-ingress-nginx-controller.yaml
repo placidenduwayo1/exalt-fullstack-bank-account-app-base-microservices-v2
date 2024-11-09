@@ -33,4 +33,3 @@ spec:
                 name: exalt-microservices-configuration-server
                 port:
                   name: ms-config-port
-
