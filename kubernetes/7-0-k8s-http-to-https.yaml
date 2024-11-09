@@ -2,7 +2,7 @@ apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
 metadata:
   name: http-to-https
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   redirectToHttps:
     enabled: true
