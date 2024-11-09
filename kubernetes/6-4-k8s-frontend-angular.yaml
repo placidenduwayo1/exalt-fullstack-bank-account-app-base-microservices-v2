@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: exalt-bank-account-angular-app
+  name: exalt-bank-account-app-frontend-angular
   labels:
-    app: exalt-bank-account-angular-app
-  namespace: exalt-ns
+    app: exalt-bank-account-app-frontend-angular
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: exalt-bank-account-angular-app
+      app: exalt-bank-account-app-frontend-angular
   template:
     metadata:
-      name: exalt-bank-account-angular-app
+      name: exalt-bank-account-app-frontend-angular
       labels:
-        app: exalt-bank-account-angular-app
+        app: exalt-bank-account-app-frontend-angular
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       containers:
-        - name: exalt-bank-account-angular-app
-          image: placidenduwayo1/exalt-bank-account-angular-app:1.0.0
+        - name: exalt-bank-account-app-frontend-angular
+          image: placidenduwayo1/exalt-bank-account-app-frontend-angular:1.0.0
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -29,13 +29,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: exalt-bank-account-angular-app
+  name: exalt-bank-account-app-sa
   labels:
-    app: exalt-bank-account-angular-app
-  namespace: exalt-ns
+    app: exalt-bank-account-app-sa
+  namespace: exalt-bank-account-app-ns
 spec:
   selector:
-    app: exalt-bank-account-angular-app
+    app: exalt-bank-account-app-frontend-angular
   ports:
     - protocol: TCP
       port: 80

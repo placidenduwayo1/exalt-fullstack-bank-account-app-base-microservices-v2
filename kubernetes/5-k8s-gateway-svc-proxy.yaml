@@ -47,5 +47,3 @@ spec:
       protocol: TCP
       targetPort: 8101
   type: ClusterIP
----
-# kafka-ui

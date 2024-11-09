@@ -1,0 +1,65 @@
+# schema registry
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schema-registry-service
+  labels:
+    app: schema-registry-service
+  namespace: exalt-bank-account-app-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: schema-registry-service
+  template:
+    metadata:
+      name: schema-registry-service
+      labels:
+        app: schema-registry-service
+    spec:
+      serviceAccountName: exalt-bank-account-app-sa
+      initContainers:
+        - name: kafka-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
+      containers:
+        - name: schema-registry-service
+          image: confluentinc/cp-schema-registry:5.4.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+              name: schema-port
+          env:
+            - name: SCHEMA_REGISTRY_HOST_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: exalt-config-map-variables
+                  key: schema_registry_host_key
+            - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: exalt-config-map-variables
+                  key: kafka_servers_key
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schema-registry-service
+  labels:
+    app: schema-registry-service
+  namespace: exalt-bank-account-app-ns
+spec:
+  selector:
+    app: schema-registry-service
+  ports:
+    - port: 9092
+      protocol: TCP
+      targetPort: schema-port
+      name: schema-port-svc
+  type: ClusterIP
