@@ -69,10 +69,12 @@
             <version>${bcpkix-jdk18on.version}</version>
         </dependency>
 
+        <!--  kubernetes dependency for microservices discovery and load balance-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <artifactId>spring-cloud-starter-kubernetes-client-all</artifactId>
         </dependency>
+
         <!--mapstruct dependency-->
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -83,6 +85,12 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!--  spring boot starter actuator-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
     </dependencies>

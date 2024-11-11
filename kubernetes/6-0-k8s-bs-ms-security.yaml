@@ -4,7 +4,7 @@ metadata:
   name: exalt-business-ms-spring-security-aouth2-res-server
   labels:
     app: exalt-business-ms-spring-security-aouth2-res-server
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
@@ -16,9 +16,9 @@ spec:
       labels:
         app: exalt-business-ms-spring-security-aouth2-res-server
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       initContainers:
-        - name: ms-config-service
+        - name: ms-config-busybox
           image: busybox
           command:
             - 'sh'
