@@ -23,7 +23,8 @@ spec:
                 name: kafka-ui
                 port:
                   name: kfk-ui-port-svc
-    - host: mss-config-server.com
+
+    - host: mss-config.api.com
       http:
         paths:
           - path: /
@@ -33,3 +34,58 @@ spec:
                 name: exalt-microservices-configuration-server
                 port:
                   name: ms-config-port
+
+    - host: security.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-business-ms-spring-security-aouth2-res-server
+                port:
+                  name: security-port
+
+    - host: customer.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-business-microservice-customer
+                port:
+                  name: customer-port
+
+    - host: bank-account.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-business-microservice-bank-account
+                port:
+                  name: bank-account
+
+    - host: operation.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-business-microservice-operation
+                port:
+                  name: operation-port
+
+    - host: front.app.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-bank-account-app-frontend-angular
+                port:
+                  name: front-svc-port
