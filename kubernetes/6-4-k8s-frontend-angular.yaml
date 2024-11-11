@@ -19,7 +19,7 @@ spec:
       serviceAccountName: exalt-bank-account-app-sa
       containers:
         - name: exalt-bank-account-app-frontend-angular
-          image: placidenduwayo1/exalt-bank-account-app-frontend-angular:1.0.0
+          image: placidenduwayo1/exalt-bank-account-angular-app:1.0.0
           imagePullPolicy: Always
           ports:
             - containerPort: 80
