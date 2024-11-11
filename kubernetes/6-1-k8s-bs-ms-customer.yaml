@@ -4,7 +4,7 @@ metadata:
   name: exalt-business-microservice-customer
   labels:
     app: exalt-business-microservice-customer
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
@@ -16,20 +16,20 @@ spec:
       labels:
         app: exalt-business-microservice-customer
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       initContainers:
-        - name: ms-config-service
+        - name: ms-config-busybox
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for exalt-microservices-config-service ready; sleep 5; done;'
-        - name: database
+            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for mss-config-service to be ready; sleep 5; done;'
+        - name: database-busybox
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -z mysql-db 3306; do echo waiting for database to be ready; sleep 5; done;'
+            - 'until nc -z bank-account-app-apis-dbs 3306; do echo waiting for database to be ready; sleep 5; done;'
       containers:
         - name: exalt-business-microservice-customer
           image: placidenduwayo1/exalt-business-microservice-customer:1.0.0
@@ -37,6 +37,100 @@ spec:
           ports:
             - containerPort: 8103
               name: customer-api
+          livenessProbe:
+            httpGet:
+              port: customer-api
+              path: /actuator/health/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              port: customer-api
+              path: /actuator/health/readiness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          env:
+            - name: APPLICATION_NAME6
+              valueFrom:
+                configMapKeyRef:
+                  key: application_name6
+                  name: exalt-config-map-variables
+            - name: SERVER_PORT6
+              valueFrom:
+                configMapKeyRef:
+                  key: server_port6
+                  name: exalt-config-map-variables
+            - name: CONFIGURATION_SERVER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: configuration_server_host
+                  name: exalt-config-map-variables
+            - name: CONFIGURATION_SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: configuration_server_port
+                  name: exalt-config-map-variables
+            - name: DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: database_host
+                  name: exalt-config-map-variables
+            - name: DATABASE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: database_port
+                  name: exalt-config-map-variables
+            - name: DATABASE_NAME3
+              valueFrom:
+                configMapKeyRef:
+                  key: database_name3
+                  name: exalt-config-map-variables
+            - name: DATABASE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: database_username
+                  name: exalt-config-map-variables
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: database_password
+                  name: exalt-config-map-variables
+            - name: KAFKA_KEY_SERIALIZER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_key_serializer
+                  name: exalt-config-map-variables
+            - name: KAFKA_VALUE_SERIALIZER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_value_serializer
+                  name: exalt-config-map-variables
+            - name: KAFKA_KEY_DESERIALIZER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_key_deserializer
+                  name: exalt-config-map-variables
+            - name: KAFKA_VALUE_DESERIALIZER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_value_deserializer
+                  name: exalt-config-map-variables
+            - name: PUBLIC_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: public_key
+                  name: exalt-config-map-variables
+            - name: KAFKA_APPLICATION_TOPIC_NAME010
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_application_topic_name010
+                  name: exalt-config-map-variables
+            - name: KAFKA_APPLICATION_TOPIC_RETENTION
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_application_topic_retention
+                  name: exalt-config-map-variables
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -44,14 +138,14 @@ metadata:
   name: exalt-business-microservice-customer
   labels:
     app: exalt-business-microservice-customer
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   selector:
     app: exalt-business-microservice-customer
   ports:
     - protocol: TCP
       port: 8103
-      targetPort: 8103
-      name: customer-api
+      targetPort: customer-api
+      name: customer-port
   type: ClusterIP
       

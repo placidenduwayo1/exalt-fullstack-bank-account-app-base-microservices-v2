@@ -1,0 +1,91 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: exalt-bank-account-app-ingress-nginx
+  labels:
+    app: exalt-bank-account-app-ingress-nginx
+  namespace: exalt-bank-account-app-ns
+  annotations:
+    networking.gke.io/v1beta1.FrontendConfig: "http-to-https"
+    kubernetes.io/ingress.allow-http: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: kafka-ui.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-ui
+                port:
+                  name: kfk-ui-port-svc
+
+    - host: mss-config.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-microservices-configuration-server
+                port:
+                  name: ms-config-port
+
+    - host: security.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-business-ms-spring-security-aouth2-res-server
+                port:
+                  name: security-port
+
+    - host: customer.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-business-microservice-customer
+                port:
+                  name: customer-port
+
+    - host: bank-account.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-business-microservice-bank-account
+                port:
+                  name: bank-account
+
+    - host: operation.api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-business-microservice-operation
+                port:
+                  name: operation-port
+
+    - host: front.app.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: exalt-bank-account-app-frontend-angular
+                port:
+                  name: front-svc-port
