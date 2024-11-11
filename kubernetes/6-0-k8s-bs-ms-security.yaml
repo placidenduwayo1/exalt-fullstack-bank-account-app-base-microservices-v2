@@ -24,12 +24,12 @@ spec:
             - 'sh'
             - '-c'
             - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for exalt-microservices-configuration-service ready; sleep 5; done;'
-        - name: database
+        - name: db-busybox
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -z mysql-db 3306; do echo waiting for database to be ready; sleep 5; done;'
+            - 'until nc -z bank-account-app-apis-dbs 3306; do echo waiting for database to be ready; sleep 5; done;'
       containers:
         - name: exalt-business-ms-spring-security-aouth2-res-server
           image: placidenduwayo1/exalt-business-ms-spring-security-aouth2-res-server:1.0.0
@@ -37,6 +37,19 @@ spec:
           ports:
             - containerPort: 8102
               name: security-port
+          livenessProbe:
+            httpGet:
+              port: security-port
+              path: /actuator/health/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              port: security-port
+              path: /actuator/health/readiness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -44,13 +57,13 @@ metadata:
   name: exalt-business-ms-spring-security-aouth2-res-server
   labels:
     app: exalt-business-ms-spring-security-aouth2-res-server
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   selector:
     app: exalt-business-ms-spring-security-aouth2-res-server
   ports:
     - protocol: TCP
       port: 8102
-      targetPort: 8102
+      targetPort: security-port
       name: security-port
   type: ClusterIP

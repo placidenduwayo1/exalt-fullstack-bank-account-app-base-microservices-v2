@@ -60,6 +60,18 @@ spec:
                 configMapKeyRef:
                   key: cloud_config_server_git_password
                   name: exalt-config-map-variables
+          livenessProbe:
+            httpGet:
+              port: ms-config-svc
+              path: /actuator/health/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              port: ms-config-svc
+              path: /actuator/health/readiness
+            initialDelaySeconds: 50
+            periodSeconds: 30
       restartPolicy: Always
 ---
 apiVersion: v1

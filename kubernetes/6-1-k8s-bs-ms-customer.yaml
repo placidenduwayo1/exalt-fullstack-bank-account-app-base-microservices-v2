@@ -4,7 +4,7 @@ metadata:
   name: exalt-business-microservice-customer
   labels:
     app: exalt-business-microservice-customer
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
@@ -16,20 +16,20 @@ spec:
       labels:
         app: exalt-business-microservice-customer
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       initContainers:
-        - name: ms-config-service
+        - name: ms-config-busybox
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for exalt-microservices-config-service ready; sleep 5; done;'
-        - name: database
+            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for mss-config-service to be ready; sleep 5; done;'
+        - name: database-busybox
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -z mysql-db 3306; do echo waiting for database to be ready; sleep 5; done;'
+            - 'until nc -z 3-k8s-db.yaml 3306; do echo waiting for database to be ready; sleep 5; done;'
       containers:
         - name: exalt-business-microservice-customer
           image: placidenduwayo1/exalt-business-microservice-customer:1.0.0
@@ -37,6 +37,20 @@ spec:
           ports:
             - containerPort: 8103
               name: customer-api
+          livenessProbe:
+            httpGet:
+              port: customer-api
+              path: /actuator/health/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              port: customer-api
+              path: /actuator/health/readiness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -44,14 +58,14 @@ metadata:
   name: exalt-business-microservice-customer
   labels:
     app: exalt-business-microservice-customer
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   selector:
     app: exalt-business-microservice-customer
   ports:
     - protocol: TCP
       port: 8103
-      targetPort: 8103
-      name: customer-api
+      targetPort: customer-api
+      name: customer-port
   type: ClusterIP
       

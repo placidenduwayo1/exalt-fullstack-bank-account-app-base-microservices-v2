@@ -4,7 +4,7 @@ metadata:
   name: exalt-business-microservice-bank-account
   labels:
     app: exalt-business-microservices-bank-account
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   replicas: 1
   selector:
@@ -16,7 +16,7 @@ spec:
       labels:
         app: exalt-business-microservice-bank-account
     spec:
-      serviceAccountName: exalt-svc-account
+      serviceAccountName: exalt-bank-account-app-sa
       containers:
         - name: exalt-business-microservice-bank-account
           image: placidenduwayo1/exalt-business-microservice-bank-account:1.0.0
@@ -24,6 +24,17 @@ spec:
           ports:
             - containerPort: 8104
               name: b-account-api
+          livenessProbe:
+            httpGet:
+              port: b-account-api
+              path: /actuator/heath/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              port: b-account-api
+              path: /actuator/health/readiness
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -31,14 +42,13 @@ metadata:
   name: exalt-business-microservice-bank-account
   labels:
     app: exalt-business-microservice-bank-account
-  namespace: exalt-ns
+  namespace: exalt-bank-account-app-ns
 spec:
   selector:
     app: exalt-business-microservice-bank-account
   ports:
     - protocol: TCP
       port: 8104
-      targetPort: 8104
-      name: b-account-api
+      targetPort: b-account-api
+      name: bank-account
   type: ClusterIP
-      
