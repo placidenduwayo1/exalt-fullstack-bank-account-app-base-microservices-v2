@@ -330,7 +330,6 @@ services:
       KAFKA_APPLICATION_TOPIC_NAME100: "${KAFKA_APPLICATION_TOPIC_NAME100}"
       KAFKA_APPLICATION_TOPIC_RETENTION: "${KAFKA_APPLICATION_TOPIC_RETENTION}"
 
-#------------- frontend angular application
   exalt-bank-account-app-frontend-angular:
     image: placidenduwayo1/${APPLICATION_NAME8}:1.0.0
     container_name: ${APPLICATION_NAME8}
