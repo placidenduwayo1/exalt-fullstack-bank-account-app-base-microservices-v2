@@ -1,11 +1,10 @@
-# application name
 spring:
   application:
     name: exalt-microservices-configuration-server
-  # disable banner
+
   main:
     banner-mode: off
-  # cloud config server
+
   cloud:
     config:
       server:
@@ -15,7 +14,7 @@ spring:
           search-paths: configurations-center
           username: placide.nd@gmail.com
           password: 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
-# cloud config server port
+
 server:
   address: localhost
   port: 8100

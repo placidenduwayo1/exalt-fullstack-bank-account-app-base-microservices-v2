@@ -48,7 +48,7 @@ spring:
 
 
 rsa:
-  rsa-public-key: classpath:certs/publicKey.pem
+  rsa-public-key: ${PUBLIC_KEY}
 
 kafka:
   topic:
