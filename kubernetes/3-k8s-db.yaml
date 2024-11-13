@@ -42,7 +42,7 @@ metadata:
     app: bank-account-app-apis-dbs
   namespace: exalt-bank-account-app-ns
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: bank-account-app-apis-dbs

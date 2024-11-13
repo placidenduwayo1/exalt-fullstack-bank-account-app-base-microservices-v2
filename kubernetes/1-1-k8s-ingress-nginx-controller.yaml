@@ -13,7 +13,9 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
+
     - host: exalt.kafka-ui.com
+
       http:
         paths:
           - path: /
@@ -34,7 +36,6 @@ spec:
                 name: exalt-microservices-configuration-server
                 port:
                   name: ms-config-port
-
     - host: exalt.bs-ms.security-api.com
       http:
         paths:
