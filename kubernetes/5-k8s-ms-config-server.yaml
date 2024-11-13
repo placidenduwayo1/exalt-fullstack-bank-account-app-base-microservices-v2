@@ -29,37 +29,37 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: application_name1
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: SERVER_PORT1
               valueFrom:
                 configMapKeyRef:
                   key: server_port1
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: CLOUD_CONFIG_SERVER_GIT_URI
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: cloud_config_server_git_uri
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-credentials
             - name: CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: cloud_config_server_git_default_label
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-credentials
             - name: CLOUD_CONFIG_SERVER_GIT_PATHS
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: cloud_config_server_git_paths
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-credentials
             - name: CLOUD_CONFIG_SERVER_GIT_USERNAME
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: cloud_config_server_git_username
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-credentials
             - name: CLOUD_CONFIG_SERVER_GIT_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: cloud_config_server_git_password
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-credentials
           livenessProbe:
             httpGet:
               port: ms-config-svc

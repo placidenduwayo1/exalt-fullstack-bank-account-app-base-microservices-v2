@@ -37,12 +37,12 @@ spec:
             - name: SCHEMA_REGISTRY_HOST_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
                   key: schema_registry_host_key
             - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
               valueFrom:
                 configMapKeyRef:
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
                   key: kafka_servers_key
       restartPolicy: Always
 

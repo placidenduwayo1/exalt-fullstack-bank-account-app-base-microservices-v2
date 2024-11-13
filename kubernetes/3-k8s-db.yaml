@@ -33,18 +33,6 @@ spec:
     requests:
       storage: 500M
 ---
-# database pwd
-apiVersion: v1
-kind: Secret
-metadata:
-  namespace: exalt-bank-account-app-ns
-  name: db-credentials
-  labels:
-    app: db-credentials
-type: Opaque
-data:
-  mysql-mdp: "cm9vdA=="
----
 
 apiVersion: apps/v1
 kind: Deployment
@@ -54,7 +42,7 @@ metadata:
     app: bank-account-app-apis-dbs
   namespace: exalt-bank-account-app-ns
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: bank-account-app-apis-dbs
@@ -91,13 +79,13 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: db-credentials
-                  key: mysql-mdp
+                  key: bank-account-app-db-pwd
+                  name: exalt-bank-account-app-credentials
           volumeMounts:
             - mountPath: /var/lib/mysql
-              name: db-data
+              name: bank-account-app-volume
       volumes:
-        - name: db-data
+        - name: bank-account-app-volume
           persistentVolumeClaim:
             claimName: db-persistent-volume-claim
       restartPolicy: Always

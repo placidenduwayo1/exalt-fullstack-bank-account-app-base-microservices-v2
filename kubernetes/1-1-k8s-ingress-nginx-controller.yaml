@@ -13,7 +13,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: kafka-ui.com
+    - host: exalt.kafka-ui.com
       http:
         paths:
           - path: /
@@ -24,7 +24,7 @@ spec:
                 port:
                   name: kfk-ui-port-svc
 
-    - host: mss-config.api.com
+    - host: exalt.mss-config-server-api.com
       http:
         paths:
           - path: /
@@ -35,7 +35,7 @@ spec:
                 port:
                   name: ms-config-port
 
-    - host: security.api.com
+    - host: exalt.bs-ms.security-api.com
       http:
         paths:
           - path: /
@@ -46,7 +46,7 @@ spec:
                 port:
                   name: security-port
 
-    - host: customer.api.com
+    - host: exalt.bs-ms.customer-api.com
       http:
         paths:
           - path: /
@@ -57,7 +57,7 @@ spec:
                 port:
                   name: customer-port
 
-    - host: bank-account.api.com
+    - host: exalt.bs-ms.bank-account-api.com
       http:
         paths:
           - path: /
@@ -68,7 +68,7 @@ spec:
                 port:
                   name: bank-account
 
-    - host: operation.api.com
+    - host: exalt.bs-ms.operation-api.com
       http:
         paths:
           - path: /
@@ -79,7 +79,7 @@ spec:
                 port:
                   name: operation-port
 
-    - host: front.app.com
+    - host: exalt.front-app.com
       http:
         paths:
           - path: /

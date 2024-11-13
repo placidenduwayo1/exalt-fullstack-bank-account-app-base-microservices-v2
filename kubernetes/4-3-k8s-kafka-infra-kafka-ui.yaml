@@ -37,23 +37,23 @@ spec:
             - name: KAFKA_CLUSTERS_0_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
                   key: kafka_cluster_key
             - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
               valueFrom:
                 configMapKeyRef:
                   key: kafka_servers_key
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: KAFKA_CLUSTERS_0_METRICS_PORT
               valueFrom:
                 configMapKeyRef:
                   key: kafka-cluster_metric_port_key
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: KAFKA_CLUSTERS_0_SCHEMAREGISTRY
               valueFrom:
                 configMapKeyRef:
                   key: kafka_cluster_schema_registry_key
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
       restartPolicy: Always
 ---
 apiVersion: v1
