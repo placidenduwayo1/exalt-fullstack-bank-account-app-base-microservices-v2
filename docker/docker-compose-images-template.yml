@@ -20,7 +20,6 @@ services:
       - bank-account-apis
 
   ##-------------- kafka infrastructure -------------------
-  # zookeeper
   zookeeper-server:
     image: zookeeper:3.4.9
     container_name: zookeeper-server
@@ -36,7 +35,6 @@ services:
       start_period: 10s
     restart: no
 
-  #kafka brokers
   kafka-server1:
     image: obsidiandynamics/kafka
     container_name: kafka-server1
@@ -88,8 +86,6 @@ services:
       timeout: 10s
       retries: 10
     restart: no
-
-  # schema registry for avro serialization
   schema-registry-service:
     image: confluentinc/cp-schema-registry:5.4.0
     container_name: schema-registry-service
@@ -106,7 +102,7 @@ services:
     networks:
       - bank-account-apis
     restart: no
-    # UI for kafka
+
   kafka-UI:
     container_name: kafka-UI
     image: provectuslabs/kafka-ui:latest
@@ -131,7 +127,7 @@ services:
       - bank-account-apis
     restart: no
 
-#  # ---------------- transverse microservices---------------------
+#  ---------------- transverse microservices---------------------
   exalt-microservices-configuration-server:
     image: placidenduwayo1/${APPLICATION_NAME1}:1.0.0
     container_name: ${APPLICATION_NAME1}
@@ -186,7 +182,7 @@ services:
       GATEWAY_ROUTE_URI4: "${GATEWAY_ROUTE_URI4}"
       SERVER_PORT3: "${SERVER_PORT3}"
 
-#  ## spring security microservice
+# ------------------------ spring security microservice-------------------
   exalt-business-ms-spring-security-aouth2-res-server:
     image: placidenduwayo1/${APPLICATION_NAME4}:1.0.0
     container_name: ${APPLICATION_NAME4}
@@ -216,7 +212,7 @@ services:
       PRIVATE_KEY: "${PRIVATE_KEY}"
       SERVER_PORT4: "${SERVER_PORT4}"
 
-## business microservices: customer, bank-account, operation
+#-----------------business microservices: customer, bank-account, operation---------------
   exalt-business-microservice-customer:
     image: placidenduwayo1/${APPLICATION_NAME6}:1.0.0
     container_name: ${APPLICATION_NAME6}
