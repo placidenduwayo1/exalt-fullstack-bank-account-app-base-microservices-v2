@@ -34,6 +34,13 @@ spec:
             httpGet:
               port: b-account-api
               path: /actuator/health/readiness
+          env:
+            - name: APPLICATION_NAME5
+              valueFrom:
+                configMapKeyRef:
+                  key: application_name5
+                  name: exalt-bank-account-app-cm
+            - name:
       restartPolicy: Always
 ---
 apiVersion: v1

@@ -54,57 +54,57 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: application_name4
-                  name: exalt-config-map-variables
-            - name: SERVER_PORT4
-              valueFrom:
-                configMapKeyRef:
-                  key: server_port4
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: CONFIGURATION_SERVER_HOST
               valueFrom:
                 configMapKeyRef:
                   key: configuration_server_host
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: CONFIGURATION_SERVER_PORT
               valueFrom:
                 configMapKeyRef:
                   key: configuration_server_port
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: DATABASE_HOST
               valueFrom:
                 configMapKeyRef:
                   key: database_host
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: DATABASE_PORT
               valueFrom:
                 configMapKeyRef:
                   key: database_port
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: DATABASE_NAME1
               valueFrom:
                 configMapKeyRef:
                   key: database_name1
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: DATABASE_USERNAME
               valueFrom:
                 configMapKeyRef:
                   key: database_username
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: DATABASE_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: database_password
-                  name: exalt-config-map-variables
+                  name: exalt-bank-account-app-cm
             - name: PUBLIC_KEY
               valueFrom:
-                configMapKeyRef:
-                  key: public_key
-                  name: exalt-config-map-variables
+                secretKeyRef:
+                  key: publicKey.pem
+                  name: exalt-bank-account-app-credentials
             - name: PRIVATE_KEY
               valueFrom:
+                secretKeyRef:
+                  key: publicKey.pem
+                  name: exalt-bank-account-app-credentials
+            - name: SERVER_PORT4
+              valueFrom:
                 configMapKeyRef:
-                  key: private_key
-                  name: exalt-config-map-variables
+                  key: server_port4
+                  name: exalt-bank-account-app-cm
       restartPolicy: Always
 ---
 apiVersion: v1
