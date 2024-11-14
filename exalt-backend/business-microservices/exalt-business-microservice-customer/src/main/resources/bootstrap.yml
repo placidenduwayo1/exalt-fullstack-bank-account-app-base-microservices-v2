@@ -15,7 +15,7 @@ spring:
 
   kafka:
     producer:
-      bootstrap-servers: http://kafka-server:19092
+      bootstrap-servers: kafka-server:19092
       key-serializer: ${KAFKA_KEY_SERIALIZER}
       value-serializer: ${KAFKA_VALUE_SERIALIZER}
       properties:
@@ -46,7 +46,7 @@ spring:
     password: ${DATABASE_PASSWORD}
 
 rsa:
-  rsa-public-key: ${PUBLIC_KEY}
+  rsa-public-key: classpath:certs/publicKey.pem
 
 kafka:
   topic:
