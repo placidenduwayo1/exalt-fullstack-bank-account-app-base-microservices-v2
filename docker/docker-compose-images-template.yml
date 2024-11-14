@@ -277,7 +277,6 @@ services:
       PUBLIC_KEY: "${PUBLIC_KEY}"
       SERVER_PORT6: "${SERVER_PORT6}"
 
-
   exalt-business-microservice-bank-account:
     image: placidenduwayo1/${APPLICATION_NAME5}:1.0.0
     container_name: ${APPLICATION_NAME5}

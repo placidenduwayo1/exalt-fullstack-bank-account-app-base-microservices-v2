@@ -1,7 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: exalt-config-map-variables
+  name: exalt-bank-account-app-cm
+  labels:
+    app: exalt-bank-account-app-cm
+
   namespace: exalt-bank-account-app-ns
 data:
   schema_registry_host_key: "schema-registry-service"
@@ -28,22 +31,8 @@ data:
   application_name7: "exalt-business-microservice-operation"
   application_name8: "exalt-bank-account-app-frontend-angular"
 
-  cloud_config_server_git_uri: "https://github.com/placidenduwayo1/exalt-fullstack-bank-account-app-base-microservices-v2.git"
-  cloud_config_server_git_default_label: "main"
-  cloud_config_server_git_paths: "configurations-center"
-  cloud_config_server_git_username: "placide.nd@gmail.com"
-  cloud_config_server_git_password: "ghp_6igiexdwi91lgpoxeyqzibbuvqit2x1slu38"
   configuration_server_host: "exalt-microservices-configuration-server"
   configuration_server_port: "8100"
-
-  database_host: "bank-account-app-apis-dbs"
-  database_name1: "security_service_users_db"
-  database_name2: "bank_account_api_db"
-  database_name3: "customer_api_db"
-  database_name4: "operation_api_db"
-  database_username: "root"
-  database_password: "root"
-  database_port: "3306"
 
   kafka_application_topic_name000: "current-bank-account"
   kafka_application_topic_name001: "saving-bank-account"
@@ -55,10 +44,6 @@ data:
   kafka_key_serializer: "org.apache.kafka.common.serialization.StringSerializer"
   kafka_value_deserializer: "io.confluent.kafka.serializers.KafkaAvroDeserializer"
   kafka_value_serializer: "io.confluent.kafka.serializers.KafkaAvroSerializer"
-
-
-  private_key: "classpath:certs/privatekey.pem"
-  public_key: "classpath:certs/publickey.pem"
 
   schema_registry_server_host: "schema-registry-service"
   schema_registry_server_port: "8081"

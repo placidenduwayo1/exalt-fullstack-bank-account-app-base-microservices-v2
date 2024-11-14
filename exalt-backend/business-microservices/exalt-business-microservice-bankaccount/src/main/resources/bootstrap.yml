@@ -70,3 +70,4 @@ management:
       show-components: always
       probes:
         enabled: true # enable /actuator/health/liveness and /actuator/health/readiness for K8s
+
