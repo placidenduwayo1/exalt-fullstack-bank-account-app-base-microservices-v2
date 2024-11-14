@@ -66,7 +66,6 @@ pipeline {
             steps {
                 echo "------------------- Starting build docker images of the bank-account application---------------"
                 script {
-                    sh "docker compose -f ./docker/docker-compose-images-template.yml down"
                     sh "docker compose -f ./docker/docker-compose-images-template.yml build"
                     sh "docker system prune -f"
                 }
