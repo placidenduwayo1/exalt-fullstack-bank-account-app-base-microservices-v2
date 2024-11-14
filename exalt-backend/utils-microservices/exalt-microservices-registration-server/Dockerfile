@@ -22,5 +22,5 @@ COPY --from=builder /build/target/spring-boot-loader/ ./
 COPY --from=builder /build/target/snapshot-dependencies/ ./
 COPY --from=builder /build/target/application/ ./
 
-EXPOSE 8761
+EXPOSE ${SERVER_PORT2}
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

@@ -1,0 +1,65 @@
+# create service account in bank-account-ns namespace
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: exalt-bank-account-app-sa
+  labels:
+    app: exalt-bank-account-app-sa
+  namespace: exalt-bank-account-app-ns
+---
+# create 'role' that will be connected to created service account
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: exalt-bank-account-app-role-admin
+  labels:
+    app: exalt-bank-account-app-role-admin
+  namespace: exalt-bank-account-app-ns
+rules:
+  - apiGroups:
+      - ""
+      - apps
+      - autoscaling
+      - batch
+      - extensions
+      - policy
+      - rbac.authorization.k8s.io
+    resources:
+      - pods
+      - componentstatuses
+      - configmaps
+      - daemonsets
+      - deployments
+      - events
+      - endpoints
+      - horizontalpodautoscalers
+      - ingress
+      - jobs
+      - limitranges
+      - namespaces
+      - nodes
+      - pods
+      - persistentvolumes
+      - persistentvolumeclaims
+      - resourcequotas
+      - replicasets
+      - replicationcontrollers
+      - serviceaccounts
+      - services
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: exalt-bank-account-app-role-admin-bind
+  labels:
+    app: exalt-bank-account-app-role-admin-bind
+  namespace: exalt-bank-account-app-ns
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: exalt-bank-account-app-role-admin
+subjects:
+  - kind: ServiceAccount
+    name: exalt-bank-account-app-sa
+    namespace: exalt-bank-account-app-ns

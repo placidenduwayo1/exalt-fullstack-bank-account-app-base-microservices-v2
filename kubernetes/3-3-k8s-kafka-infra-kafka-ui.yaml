@@ -1,0 +1,74 @@
+# kafka ui
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-ui
+  labels:
+    app: kafka-ui
+  namespace: exalt-bank-account-app-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-ui
+  template:
+    metadata:
+      name: kafka-ui
+      labels:
+        app: kafka-ui
+    spec:
+      serviceAccountName: exalt-bank-account-app-sa
+      initContainers:
+        - name: kafka-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
+      containers:
+        - name: kafka-ui
+          image: provectuslabs/kafka-ui:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: kafka-ui-port
+          env:
+            - name: KAFKA_CLUSTERS_0_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: exalt-bank-account-app-cm
+                  key: kafka_cluster_key
+            - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_servers_key
+                  name: exalt-bank-account-app-cm
+            - name: KAFKA_CLUSTERS_0_METRICS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka-cluster_metric_port_key
+                  name: exalt-bank-account-app-cm
+            - name: KAFKA_CLUSTERS_0_SCHEMAREGISTRY
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_cluster_schema_registry_key
+                  name: exalt-bank-account-app-cm
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-ui
+  labels:
+    app: kafka-ui
+  namespace: exalt-bank-account-app-ns
+spec:
+  selector:
+    app: kafka-ui
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: kafka-ui-port
+      name: kfk-ui-port-svc
+  type: ClusterIP
