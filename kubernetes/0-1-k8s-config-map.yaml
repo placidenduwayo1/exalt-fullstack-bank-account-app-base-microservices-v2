@@ -4,7 +4,6 @@ metadata:
   name: exalt-bank-account-app-cm
   labels:
     app: exalt-bank-account-app-cm
-
   namespace: exalt-bank-account-app-ns
 data:
   schema_registry_host_key: "schema-registry-service"
