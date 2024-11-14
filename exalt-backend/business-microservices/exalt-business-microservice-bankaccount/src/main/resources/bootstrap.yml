@@ -46,7 +46,7 @@ spring:
           url: http://schema-registry-service:8081
 
 rsa:
-  rsa-public-key: ${PUBLIC_KEY}
+  rsa-public-key: classpath:certs/publicKey.pem
 
 kafka:
   topic:
@@ -70,3 +70,4 @@ management:
       show-components: always
       probes:
         enabled: true # enable /actuator/health/liveness and /actuator/health/readiness for K8s
+
