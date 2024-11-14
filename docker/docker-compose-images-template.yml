@@ -86,6 +86,7 @@ services:
       timeout: 10s
       retries: 10
     restart: no
+
   schema-registry-service:
     image: confluentinc/cp-schema-registry:5.4.0
     container_name: schema-registry-service
@@ -153,6 +154,31 @@ services:
       CLOUD_CONFIG_SERVER_GIT_USERNAME: "${CLOUD_CONFIG_SERVER_GIT_USERNAME}"
       CLOUD_CONFIG_SERVER_GIT_PASSWORD: "${CLOUD_CONFIG_SERVER_GIT_PASSWORD}"
       SERVER_PORT1: "${SERVER_PORT1}"
+
+  exalt-microservices-registration-server:
+    image: placidenduwayo1/${APPLICATION_NAME2}:1.0.0
+    container_name: ${APPLICATION_NAME2}
+    build:
+      context: ../exalt-backend/utils-microservices/exalt-microservices-registration-server
+      dockerfile: Dockerfile
+    ports:
+      - ${SERVER_PORT2}:${SERVER_PORT2}
+    networks:
+      - bank-account-apis
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://${APPLICATION_NAME2}:${SERVER_PORT2}" ]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    restart: no
+    environment:
+      APPLICATION_NAME2: ${APPLICATION_NAME2}
+      SERVER_PORT2: ${SERVER_PORT2}
+      CONFIGURATION_SERVER_HOST: ${CONFIGURATION_SERVER_HOST}
+      CONFIGURATION_SERVER_PORT: ${CONFIGURATION_SERVER_PORT}
+    depends_on:
+      exalt-microservices-configuration-server:
+        condition: service_healthy
 
   exalt-gateway-service-proxy:
     image: placidenduwayo1/${APPLICATION_NAME3}:1.0.0
@@ -235,7 +261,6 @@ services:
     restart: no
     environment:
       APPLICATION_NAME6: "${APPLICATION_NAME6}"
-      SERVER_PORT6: "${SERVER_PORT6}"
       CONFIGURATION_SERVER_HOST: "${CONFIGURATION_SERVER_HOST}"
       CONFIGURATION_SERVER_PORT: "${CONFIGURATION_SERVER_PORT}"
       DATABASE_HOST: "${DATABASE_HOST}"
@@ -250,6 +275,7 @@ services:
       KAFKA_APPLICATION_TOPIC_NAME010: "${KAFKA_APPLICATION_TOPIC_NAME010}"
       KAFKA_APPLICATION_TOPIC_RETENTION: "${KAFKA_APPLICATION_TOPIC_RETENTION}"
       PUBLIC_KEY: "${PUBLIC_KEY}"
+      SERVER_PORT6: "${SERVER_PORT6}"
 
   exalt-business-microservice-bank-account:
     image: placidenduwayo1/${APPLICATION_NAME5}:1.0.0

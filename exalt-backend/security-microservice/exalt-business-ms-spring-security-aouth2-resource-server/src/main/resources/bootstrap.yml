@@ -20,8 +20,8 @@ spring:
       ddl-auto: update
 
 rsa:
-  public-key: ${PUBLIC_KEY}
   private-key: ${PRIVATE_KEY}
+  public-key: ${PUBLIC_KEY}
 
 server:
   port: ${SERVER_PORT4}
@@ -38,3 +38,8 @@ management:
       show-components: always
       probes:
         enabled: true # enable /actuator/health/liveness and /actuator/health/readiness for K8s
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${APPLICATION_NAME2}:${SERVER_PORT2}/eureka/

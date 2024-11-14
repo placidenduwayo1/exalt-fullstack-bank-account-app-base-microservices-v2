@@ -5,11 +5,6 @@ metadata:
   labels:
     app: exalt-bank-account-app-ingress-nginx
   namespace: exalt-bank-account-app-ns
-  annotations:
-    networking.gke.io/v1beta1.FrontendConfig: "http-to-https"
-    kubernetes.io/ingress.allow-http: "true"
-    nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
 spec:
   ingressClassName: nginx
   rules:
