@@ -38,15 +38,15 @@ spec:
             - containerPort: 8104
               name: b-account-api
           livenessProbe:
-            httpGet:
+            tcpSocket:
               port: b-account-api
-              path: /actuator/heath/liveness
             initialDelaySeconds: 50
             periodSeconds: 30
           readinessProbe:
-            httpGet:
+            tcpSocket:
               port: b-account-api
-              path: /actuator/health/readiness
+            initialDelaySeconds: 50
+            periodSeconds: 30
           env:
             - name: APPLICATION_NAME5
               valueFrom:
@@ -133,6 +133,7 @@ spec:
                 configMapKeyRef:
                   key: server_port5
                   name: exalt-bank-account-app-cm
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service

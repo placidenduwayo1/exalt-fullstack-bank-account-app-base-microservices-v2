@@ -17,6 +17,19 @@ spec:
         app: exalt-business-microservice-operation
     spec:
       serviceAccountName: exalt-bank-account-app-sa
+      initContainers:
+        - name: ms-config-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for mss-config-service to be ready; sleep 5; done;'
+        - name: database-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z bank-account-app-apis-dbs 3306; do echo waiting for database to be ready; sleep 5; done;'
       containers:
         - name: exalt-business-microservice-operation
           image: placidenduwayo1/exalt-business-microservice-operation:1.0.0
@@ -24,16 +37,24 @@ spec:
           ports:
             - containerPort: 8105
               name: operation-api
+          env:
+            - name: APPLICATION_NAME7
+              valueFrom:
+                configMapKeyRef:
+                  key: application_name7
+                  name: exalt-bank-account-app-cm
+            -
           livenessProbe:
-            httpGet:
+            tcpSocket:
               port: operation-api
-              path: /actuator/heath/liveness
             initialDelaySeconds: 50
             periodSeconds: 30
           readinessProbe:
-            httpGet:
+            tcpSocket:
               port: operation-api
-              path: /actuator/health/readiness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+
       restartPolicy: Always
 ---
 apiVersion: v1

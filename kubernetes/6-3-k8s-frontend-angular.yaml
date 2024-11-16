@@ -24,6 +24,16 @@ spec:
           ports:
             - containerPort: 80
               name: front-port
+          livenessProbe:
+            tcpSocket:
+              port: front-port
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: front-port
+            initialDelaySeconds: 50
+            periodSeconds: 30
       restartPolicy: Always
 ---
 apiVersion: v1
