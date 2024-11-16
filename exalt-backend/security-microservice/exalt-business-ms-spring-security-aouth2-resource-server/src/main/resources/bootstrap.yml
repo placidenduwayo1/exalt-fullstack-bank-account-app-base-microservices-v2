@@ -42,4 +42,4 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://${APPLICATION_NAME2}:${SERVER_PORT2}/eureka/
+      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/

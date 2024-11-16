@@ -7,16 +7,21 @@ metadata:
   namespace: exalt-bank-account-app-ns
 data:
   schema_registry_host_key: "schema-registry-service"
-  kafka_servers_key: "kafka-server:9092"
-  kafka_broker_id_key: "1"
+  kafka_servers_key: "kafka-server1:9092,kafka-server2:9093"
+  kafka_broker_id_1_key: "1"
+  kafka_broker_id_2_key: "2"
   zookeeper_connect_key: "zookeeper-server:2181"
   allowing_plain_text_lister_key: "yes"
   kafka_listeners_security_protocol_map_key: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
-  kafka_listeners_key: "PLAINTEXT://:9092,PLAINTEXT_HOST://0.0.0.0:19092"
-  kafka_advertised_listeners_keys: "PLAINTEXT://kafka-server:9092,PLAINTEXT_HOST://localhost:19092"
+  kafka_listeners_1_key: "PLAINTEXT://:9092,PLAINTEXT_HOST://0.0.0.0:19092"
+  kafka_advertised_listeners_1_key: "PLAINTEXT://kafka-server1:9092,PLAINTEXT_HOST://localhost:19092"
+  kafka_listeners_2_key: "PLAINTEXT://:9093,PLAINTEXT_HOST://0.0.0.0:29092"
+  kafka_advertised_listeners_2_key: "PLAINTEXT://kafka-server2:9093,PLAINTEXT_HOST://localhost:29092"
 
-  kafka_cluster_key: "kafka-cluster1"
-  kafka-cluster_metric_port_key: "9997"
+  kafka_cluster_1_key: "kafka-cluster1"
+  kafka_cluster_2_key: "kafka-cluster2"
+  kafka-cluster_metric_port_1_key: "9997"
+  kafka-cluster_metric_port_2_key: "9998"
   kafka_cluster_schema_registry_key: "schema-registry-service:8081"
 
   dynamic_config_enabled_key: "true"

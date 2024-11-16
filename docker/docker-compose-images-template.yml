@@ -189,7 +189,7 @@ services:
     ports:
       - ${SERVER_PORT3}:${SERVER_PORT3}
     depends_on:
-      exalt-microservices-configuration-server:
+      exalt-microservices-registration-server:
         condition: service_healthy
     networks:
       - bank-account-apis
@@ -218,7 +218,7 @@ services:
     ports:
       - ${SERVER_PORT4}:${SERVER_PORT4}
     depends_on:
-      exalt-microservices-configuration-server:
+      exalt-microservices-registration-server:
         condition: service_healthy
       bank-account-app-apis-dbs:
         condition: service_healthy
@@ -237,6 +237,8 @@ services:
       PUBLIC_KEY: "${PUBLIC_KEY}"
       PRIVATE_KEY: "${PRIVATE_KEY}"
       SERVER_PORT4: "${SERVER_PORT4}"
+      SERVICES_REGISTRY_SERVER_HOST: "${SERVICES_REGISTRY_SERVER_HOST}"
+      SERVICES_REGISTRY_SERVER_PORT: "${SERVICES_REGISTRY_SERVER_PORT}"
 
 #-----------------business microservices: customer, bank-account, operation---------------
   exalt-business-microservice-customer:
@@ -248,7 +250,7 @@ services:
     ports:
       - ${SERVER_PORT6}:${SERVER_PORT6}
     depends_on:
-      exalt-microservices-configuration-server:
+      exalt-microservices-registration-server:
         condition: service_healthy
       bank-account-app-apis-dbs:
         condition: service_healthy
@@ -276,6 +278,8 @@ services:
       KAFKA_APPLICATION_TOPIC_RETENTION: "${KAFKA_APPLICATION_TOPIC_RETENTION}"
       PUBLIC_KEY: "${PUBLIC_KEY}"
       SERVER_PORT6: "${SERVER_PORT6}"
+      SERVICES_REGISTRY_SERVER_HOST: "${SERVICES_REGISTRY_SERVER_HOST}"
+      SERVICES_REGISTRY_SERVER_PORT: "${SERVICES_REGISTRY_SERVER_PORT}"
 
   exalt-business-microservice-bank-account:
     image: placidenduwayo1/${APPLICATION_NAME5}:1.0.0
@@ -286,7 +290,7 @@ services:
     ports:
       - ${SERVER_PORT5}:${SERVER_PORT5}
     depends_on:
-      exalt-microservices-configuration-server:
+      exalt-microservices-registration-server:
         condition: service_healthy
       bank-account-app-apis-dbs:
         condition: service_healthy
@@ -315,6 +319,8 @@ services:
       KAFKA_APPLICATION_TOPIC_RETENTION: "${KAFKA_APPLICATION_TOPIC_RETENTION}"
       PUBLIC_KEY: "${PUBLIC_KEY}"
       SERVER_PORT5: "${SERVER_PORT5}"
+      SERVICES_REGISTRY_SERVER_HOST: "${SERVICES_REGISTRY_SERVER_HOST}"
+      SERVICES_REGISTRY_SERVER_PORT: "${SERVICES_REGISTRY_SERVER_PORT}"
 
   exalt-business-microservice-operation:
     image: placidenduwayo1/${APPLICATION_NAME7}:1.0.0
@@ -325,7 +331,7 @@ services:
     ports:
       - ${SERVER_PORT7}:${SERVER_PORT7}
     depends_on:
-      exalt-microservices-configuration-server:
+      exalt-microservices-registration-server:
         condition: service_healthy
       bank-account-app-apis-dbs:
         condition: service_healthy
@@ -354,6 +360,8 @@ services:
       KAFKA_APPLICATION_TOPIC_NAME100: "${KAFKA_APPLICATION_TOPIC_NAME100}"
       KAFKA_APPLICATION_TOPIC_RETENTION: "${KAFKA_APPLICATION_TOPIC_RETENTION}"
       PUBLIC_KEY: "${PUBLIC_KEY}"
+      SERVICES_REGISTRY_SERVER_HOST: "${SERVICES_REGISTRY_SERVER_HOST}"
+      SERVICES_REGISTRY_SERVER_PORT: "${SERVICES_REGISTRY_SERVER_PORT}"
 
   exalt-bank-account-app-frontend-angular:
     image: placidenduwayo1/${APPLICATION_NAME8}:1.0.0

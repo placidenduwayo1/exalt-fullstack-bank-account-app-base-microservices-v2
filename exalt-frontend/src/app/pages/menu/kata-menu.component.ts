@@ -212,19 +212,19 @@ export class KataMenuComponent {
         label: 'api-operations', icon: 'pi pi-server',
         items: [
           {
-            label: 'all-operations', icon: 'pi pi-list',
+            label: 'retraits/dépots', icon: 'pi pi-list',
             command: () => this.router.navigateByUrl('session/operations')
           },
           {
-            label: 'deposits', icon: 'pi pi-list',
+            label: 'dépots', icon: 'pi pi-list',
             command: () => this.router.navigateByUrl('session/operations/deposit')
           },
           {
-            label: 'withdrawals', icon: 'pi pi-list',
+            label: 'retraits', icon: 'pi pi-list',
             command: () => this.router.navigateByUrl('session/operations/withdrawal')
           },
           {
-            label: 'transfert', icon: 'pi pi-list',
+            label: 'transferts', icon: 'pi pi-list',
             command: () => this.router.navigateByUrl('session/operations/transfers')
           }
         ],
