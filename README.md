@@ -1,6 +1,7 @@
 # Résumé
-L'**Application Bank Account** est application orientée microservices avec des microservices **métiers** et des services **transverses**.
-Chaque microservice métier est implémenté dans une **architecture hexagonale**, des tests unitaires sont écrites pour garantir la qualité du code source.
+- L'**Application Bank Account** est application orientée microservices composée de microservices **métiers** et des  microservices **transverses**.
+- Chaque microservice métier est implémenté dans une **architecture hexagonale**, des tests unitaires sont écrits pour garantir la qualité du code source.
+- Une infrastructure Kafka est mise en place pour persister et distribuer les données venant des requêtes d'écriture: **POST**, **UPDATE**, **DELETE**  
  
 ## Partie Backend
  3 applications microservices métiers:

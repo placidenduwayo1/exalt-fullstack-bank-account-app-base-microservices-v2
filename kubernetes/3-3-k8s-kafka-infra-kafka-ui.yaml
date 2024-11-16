@@ -1,4 +1,3 @@
-# kafka ui
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,12 +18,18 @@ spec:
     spec:
       serviceAccountName: exalt-bank-account-app-sa
       initContainers:
-        - name: kafka-busybox
+        - name: kafka1-busybox
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -z kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
+            - 'until nc -z kafka-server1 9092; do echo waiting for kafka-server1 ready; sleep 5; done;'
+        - name: kafka2-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z kafka-server2 9093; do echo waiting for kafka-server2 ready; sleep 5; done;'
       containers:
         - name: kafka-ui
           image: provectuslabs/kafka-ui:latest
@@ -38,7 +43,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: exalt-bank-account-app-cm
-                  key: kafka_cluster_key
+                  key: kafka_cluster_1_key
             - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
               valueFrom:
                 configMapKeyRef:
@@ -47,9 +52,29 @@ spec:
             - name: KAFKA_CLUSTERS_0_METRICS_PORT
               valueFrom:
                 configMapKeyRef:
-                  key: kafka-cluster_metric_port_key
+                  key: kafka-cluster_metric_port_1_key
                   name: exalt-bank-account-app-cm
             - name: KAFKA_CLUSTERS_0_SCHEMAREGISTRY
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_cluster_schema_registry_key
+                  name: exalt-bank-account-app-cm
+            - name: KAFKA_CLUSTERS_1_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: exalt-bank-account-app-cm
+                  key: kafka_cluster_2_key
+            - name: KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_servers_key
+                  name: exalt-bank-account-app-cm
+            - name: KAFKA_CLUSTERS_1_METRICS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka-cluster_metric_port_2_key
+                  name: exalt-bank-account-app-cm
+            - name: KAFKA_CLUSTERS_1_SCHEMAREGISTRY
               valueFrom:
                 configMapKeyRef:
                   key: kafka_cluster_schema_registry_key

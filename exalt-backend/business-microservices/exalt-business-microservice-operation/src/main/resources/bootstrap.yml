@@ -16,7 +16,7 @@ spring:
 
   kafka:
     producer:
-      bootstrap-servers: kafka-server:19092
+      bootstrap-servers: kafka-server1:19092,kafka-server2:29092
       key-serializer: ${KAFKA_KEY_SERIALIZER}
       value-serializer: ${KAFKA_VALUE_SERIALIZER}
       properties:
@@ -26,7 +26,7 @@ spring:
               type:
                 headers: false
     consumer:
-      bootstrap-servers: kafka-server:19092
+      bootstrap-servers: kafka-server1:19092,kafka-server2:29092
       key-deserializer: ${KAFKA_KEY_DESERIALIZER}
       value-deserializer: ${KAFKA_VALUE_DESERIALIZER}
       properties:
@@ -72,3 +72,8 @@ management:
       show-components: always
       probes:
         enabled: true # enable /actuator/health/liveness and /actuator/health/readiness for K8s
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/

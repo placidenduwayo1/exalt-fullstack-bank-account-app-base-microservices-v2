@@ -37,3 +37,8 @@ spring:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
 server:
   port: ${SERVER_PORT3}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${SERVICES_REGISTRY_SERVER_HOST}:${SERVICES_REGISTRY_SERVER_PORT}/eureka/

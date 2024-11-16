@@ -19,15 +19,21 @@ spec:
     spec:
       serviceAccountName: exalt-bank-account-app-sa
       initContainers:
-        - name: kafka-busybox
+        - name: kafka1-busybox
           image: busybox
           command:
             - 'sh'
             - '-c'
-            - 'until nc -z kafka-server 9092; do echo waiting for kafka-server ready; sleep 5; done;'
+            - 'until nc -z kafka-server1 9092; do echo waiting for kafka-server1 ready; sleep 5; done;'
+        - name: kafka2-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z kafka-server2 9093; do echo waiting for kafka-server2 ready; sleep 5; done;'
       containers:
         - name: schema-registry-service
-          image: confluentinc/cp-schema-registry:5.4.0
+          image: confluentinc/cp-schema-registry:5.4.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081
@@ -58,7 +64,7 @@ spec:
   selector:
     app: schema-registry-service
   ports:
-    - port: 9092
+    - port: 8081
       protocol: TCP
       targetPort: schema-port
       name: schema-port-svc

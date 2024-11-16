@@ -97,9 +97,9 @@ spec:
                   name: exalt-bank-account-app-credentials
             - name: PRIVATE_KEY
               valueFrom:
-                secretKeyRef:
-                  key: public-key.pem
-                  name: exalt-bank-account-app-credentials
+               secretKeyRef:
+                 key: private-key.pem
+                 name: exalt-bank-account-app-credentials
             - name: SERVER_PORT4
               valueFrom:
                 configMapKeyRef:
