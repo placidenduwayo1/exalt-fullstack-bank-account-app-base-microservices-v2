@@ -21,6 +21,7 @@
         <bcpkix-jdk18on.version>1.76</bcpkix-jdk18on.version>
     </properties>
     <dependencies>
+        <!-- for tomcat server-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
