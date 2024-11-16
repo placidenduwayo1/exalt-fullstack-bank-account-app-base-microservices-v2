@@ -37,18 +37,6 @@ spec:
           ports:
             - containerPort: 8102
               name: security-port
-          livenessProbe:
-            httpGet:
-              port: security-port
-              path: /actuator/health/liveness
-            initialDelaySeconds: 50
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              port: security-port
-              path: /actuator/health/readiness
-            initialDelaySeconds: 50
-            periodSeconds: 30
           env:
             - name: APPLICATION_NAME4
               valueFrom:
@@ -105,6 +93,18 @@ spec:
                 configMapKeyRef:
                   key: server_port4
                   name: exalt-bank-account-app-cm
+          livenessProbe:
+            httpGet:
+              port: security-port
+              path: /actuator/health/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              port: security-port
+              path: /actuator/health/readiness
+            initialDelaySeconds: 50
+            periodSeconds: 30
       restartPolicy: Always
 ---
 apiVersion: v1
