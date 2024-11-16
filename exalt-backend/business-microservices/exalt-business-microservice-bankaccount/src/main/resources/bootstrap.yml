@@ -46,7 +46,7 @@ spring:
           url: http://schema-registry-service:8081
 
 rsa:
-  rsa-public-key: ${PUBLIC_KEY}
+  rsa-public-key: classpath:certs/publicKey.pem
 
 kafka:
   topic:
