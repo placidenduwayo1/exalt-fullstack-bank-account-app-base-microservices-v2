@@ -94,15 +94,13 @@ spec:
                   key: server_port4
                   name: exalt-bank-account-app-cm
           livenessProbe:
-            httpGet:
+            tcpSocket:
               port: security-port
-              path: /actuator/health/liveness
             initialDelaySeconds: 50
             periodSeconds: 30
           readinessProbe:
-            httpGet:
+            tcpSocket:
               port: security-port
-              path: /actuator/health/readiness
             initialDelaySeconds: 50
             periodSeconds: 30
       restartPolicy: Always
