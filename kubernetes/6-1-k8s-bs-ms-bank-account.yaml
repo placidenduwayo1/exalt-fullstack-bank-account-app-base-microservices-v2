@@ -40,13 +40,11 @@ spec:
           livenessProbe:
             tcpSocket:
               port: b-account-api
-            #  path: /actuator/health/liveness
             initialDelaySeconds: 50
             periodSeconds: 30
           readinessProbe:
             tcpSocket:
               port: b-account-api
-             # path: /actuator/health/readiness
             initialDelaySeconds: 50
             periodSeconds: 30
           env:
