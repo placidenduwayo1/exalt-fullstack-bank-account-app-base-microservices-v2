@@ -38,15 +38,24 @@ spec:
             - containerPort: 8103
               name: customer-api
           livenessProbe:
-            tcpSocket:
+            httpGet:
               port: customer-api
+              path: /actuator/health/liveness
             initialDelaySeconds: 50
             periodSeconds: 30
           readinessProbe:
-            tcpSocket:
+            httpGet:
               port: customer-api
+              path: /actuator/health/readiness
             initialDelaySeconds: 50
             periodSeconds: 30
+          startupProbe:
+            httpGet:
+              port: customer-api
+              path: /actuator/health/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+            failureThreshold: 25
           env:
             - name: APPLICATION_NAME6
               valueFrom:
