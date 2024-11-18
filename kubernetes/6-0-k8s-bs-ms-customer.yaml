@@ -47,12 +47,6 @@ spec:
               port: customer-api
             initialDelaySeconds: 50
             periodSeconds: 30
-          startupProbe:
-            httpGet:
-              port: customer-api
-              path: /actuator/health/liveness
-            initialDelaySeconds: 50
-            periodSeconds: 30
             failureThreshold: 25
           env:
             - name: APPLICATION_NAME6

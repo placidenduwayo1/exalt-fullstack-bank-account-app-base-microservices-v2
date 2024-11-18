@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api-operation")
+@RequestMapping(value = "/api/operation")
 @AllArgsConstructor
 public class OperationController {
     // adapter inputOperationService comme interface entre le domain et l'entrée extérieure
