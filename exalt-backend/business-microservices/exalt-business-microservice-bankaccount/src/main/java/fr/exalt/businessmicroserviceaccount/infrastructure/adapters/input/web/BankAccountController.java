@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping(value = "/api-bank-account")
+@RequestMapping(value = "/api/bank-account")
 @RequiredArgsConstructor
 public class BankAccountController {
     //input adapter
