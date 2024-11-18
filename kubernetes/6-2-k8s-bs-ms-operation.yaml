@@ -124,15 +124,24 @@ spec:
                   key: server_port7
                   name: exalt-bank-account-app-cm
           livenessProbe:
-            tcpSocket:
+            httpGet:
               port: operation-api
+              path: /actuator/health/liveness
             initialDelaySeconds: 50
             periodSeconds: 30
           readinessProbe:
-            tcpSocket:
+            httpGet:
               port: operation-api
+              path: /actuator/health/liveness
             initialDelaySeconds: 50
             periodSeconds: 30
+          startupProbe:
+            httpGet:
+              port: operation-api
+              path: /actuator/health/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+            failureThreshold: 25
 
       restartPolicy: Always
 ---
