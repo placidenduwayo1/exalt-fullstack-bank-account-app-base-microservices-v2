@@ -91,7 +91,7 @@ spec:
             - name: KAFKA_KEY_DESERIALIZER
               valueFrom:
                 configMapKeyRef:
-                  key: kafka_key_serializer
+                  key: kafka_key_deserializer
                   name: exalt-bank-account-app-cm
             - name: KAFKA_VALUE_DESERIALIZER
               valueFrom:
