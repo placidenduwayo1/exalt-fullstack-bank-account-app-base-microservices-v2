@@ -38,15 +38,24 @@ spec:
             - containerPort: 8104
               name: b-account-api
           livenessProbe:
-            tcpSocket:
+            httpGet:
               port: b-account-api
+              path: /actuator/health/liveness
             initialDelaySeconds: 50
             periodSeconds: 30
           readinessProbe:
-            tcpSocket:
+            httpGet:
               port: b-account-api
+              path: /actuator/health/readiness
             initialDelaySeconds: 50
             periodSeconds: 30
+          startupProbe:
+            httpGet:
+              port: b-account-api
+              path: /actuator/health/liveness
+            initialDelaySeconds: 50
+            periodSeconds: 30
+            failureThreshold: 25
           env:
             - name: APPLICATION_NAME5
               valueFrom:
@@ -65,29 +74,29 @@ spec:
                   name: exalt-bank-account-app-cm
             - name: DATABASE_HOST
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: database_host
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-credentials
             - name: DATABASE_PORT
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: database_port
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-credentials
             - name: DATABASE_NAME2
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: database_name2
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-credentials
             - name: DATABASE_USERNAME
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: database_username
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-credentials
             - name: DATABASE_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: database_password
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-credentials
             - name: KAFKA_KEY_SERIALIZER
               valueFrom:
                 configMapKeyRef:
@@ -111,7 +120,7 @@ spec:
             - name: PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
-                  key: publicKey.pem
+                  key: public-key.pem
                   name: exalt-bank-account-app-credentials
             - name: KAFKA_APPLICATION_TOPIC_NAME000
               valueFrom:

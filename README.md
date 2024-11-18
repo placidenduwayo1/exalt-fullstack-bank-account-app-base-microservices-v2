@@ -1,20 +1,22 @@
 # Résumé
-- L'**Application Bank Account** est application orientée microservices composée de microservices **métiers** et des  microservices **transverses**.
+- L'**Bank-Account-App** est application fullstack (Java 21 /Angular 16) orientée microservices composée des microservices **métiers** et des  microservices **transverses**.
 - Chaque microservice métier est implémenté dans une **architecture hexagonale**, des tests unitaires sont écrits pour garantir la qualité du code source.
-- Une infrastructure Kafka est mise en place pour persister et distribuer les données venant des requêtes d'écriture: **POST**, **UPDATE**, **DELETE**  
+- Une **infrastructure Kafka** est mise en place pour persister et distribuer les événements venant des requêtes d'écriture: **POST**, **UPDATE**, **DELETE**  
  
 ## Partie Backend
- 3 applications microservices métiers:
+La partie backend de comprend:
+
+ - **3 applications microservices métiers**:
     - exalt-business-microservice-customer, 
     - exalt-business-microservice-bank-account,
     - exalt-business-microservice-operation
 
-- 1 application microservice pour la sécurité:
+- **1 application microservice** pour la sécurité:
     - exalt-business-ms-spring-security-aouth2-resource-server
 
 - **3 api microservices transverses**: 
     - exalt-microservices-configuration-server,
-    - exalt-microservices-registration-server qui sera remplacé plus tard après intégration de **kubernetes**,
+    - exalt-microservices-registration-server à supprimer plus tard après intégration de **kubernetes**,
     - exalt-gateway-service-proxy qui sera remplacé plus tard par un **ingress-controller** de **K8s**
 
 - **infrastructure kafka**: pour la persistance et la distribution des événements kafka
@@ -23,28 +25,27 @@
     - un schema-registry-service 
     - un kafka UI
 
-- Tout l'ecosystème des applications de **Bank Account** sont containeurisées avec **docker** et déployés ensuite dans un cluster locale **Minikuke** avec **Kubernetes**
-- Après, je déploie tous ces containers docker de **Bank Account** dans un cluster **Kubernetes de Google Cloud** avec **Gcloud** et **Kubectl**
+- Tout l'ecosystème des applications de **Bank-Account-App** sont containeurisées avec **docker** et déployés ensuite dans un cluster locale **Minikuke** avec **Kubernetes**
+- Après, je déploie tous ces containers docker de **Bank-Account-App** dans un cluster **K8s de Google Cloud**
 
 ## Partie Frontend
 
-**Application angular version 16**:
+La partie frontend de **Bank-Account-App **** est une application développée en angular 16**:
 - Pattern observable avec **RxJs**
 - Gestion observable liés aux événements de click
 - Design graphique avec **PrimeNG**
 
-
-# 💰 **Bank Account Application** 💰
-- ***assets*** contient les images utilisées dans cette documentation
-- ***exalt-backend*** contient 3 types de microservices de l'application Bank Account: ***3 microservices business***, ***1 scurity microservice***  et ***3 microservices utils***
+# 💰 **Bank-Account-App** 💰
+- ***assets*** contient toutes les images utilisées dans cette documentation
 - ***configuration-center*** est un dossier externe contenant les fichiers de configuration des microservices
-- ***exalt-frontend*** contient l'application frontend angular
-- ***docker-compose-images-template.yml*** est un template de lancement de tous les containers de l'application **Bank Account**
-- ***kubernetes*** contient tous les fichiers de deploiement des containers docker de l'application **Bank Account** dans le cluster **Minikube** et dans le cluster **Google Cloud**.
+- ***docker*** est un dossier de déploiement de toutes les services (applications) qui composent **Bank-Account-App** avec un docker-compose et les scripts pour créer les bdd des microservice métiers
+- ***exalt-backend*** contient les 3 types de microservices de l'application Bank Account: ***3 microservices business***, ***1 scurity microservice***  et ***3 microservices utils***
+- ***exalt-frontend*** contient l'application frontend en Angular 16
+- ***kubernetes*** contient tous les fichiers de deploiement des containers docker de l'application **Bank Account** dans le cluster K8s **Minikube** et dans le cluster K8s sur **Google Cloud**.
 
-# BankAcount App Backend
+# Bank-AccountApp Backend
 
-- **Bank Account** est implémentée en **application orientée microservices** avec des ***microservices métiers***, un **microservice pour la sécurité** et des ***microservices transverses***
+- **Bank-Account-App** est implémentée en **application orientée microservices** avec des ***microservices métiers***, un **microservice pour la sécurité** et des ***microservices transverses***
 - Les microservices métiers: ***customer***, ***bank-account*** et ***operation***
     - chaque microservice métier est implementé dans une achitecture ***hexagonale***
     - chaque microservice métier définit un décoder de jeton JWT: **JWT Decoder** et **Filter Chain** pour la sécurité de ses apis qu'il expose

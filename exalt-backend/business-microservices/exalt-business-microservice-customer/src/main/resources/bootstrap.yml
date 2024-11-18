@@ -15,7 +15,7 @@ spring:
 
   kafka:
     producer:
-      bootstrap-servers: kafka-server1:19092,kafka-server2:29092
+      bootstrap-servers: kafka-server1:19092,kafka-server2:9092
       key-serializer: ${KAFKA_KEY_SERIALIZER}
       value-serializer: ${KAFKA_VALUE_SERIALIZER}
       properties:
@@ -25,7 +25,7 @@ spring:
               type:
                 headers: false
     consumer:
-      bootstrap-servers: kafka-server1:19092,kafka-server2:29092
+      bootstrap-servers: kafka-server1:19092,kafka-server2:9092
       key-deserializer: ${KAFKA_KEY_DESERIALIZER}
       value-deserializer: ${KAFKA_VALUE_DESERIALIZER}
       properties:
