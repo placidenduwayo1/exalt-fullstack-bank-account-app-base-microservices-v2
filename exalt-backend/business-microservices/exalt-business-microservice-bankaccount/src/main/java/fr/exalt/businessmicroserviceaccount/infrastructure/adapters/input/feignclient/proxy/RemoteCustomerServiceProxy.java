@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @FeignClient(name = "exalt-business-microservice-customer",
-        path = "/api-customer",
+        path = "/api/customer",
         configuration = RemoteCustomerRequestInterceptor.class,
         fallback = RemoteCustomerServiceProxy.RemoteCustomerFallback.class
         )

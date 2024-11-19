@@ -133,7 +133,6 @@ spec:
               port: operation-api
             initialDelaySeconds: 50
             periodSeconds: 30
-
       restartPolicy: Always
 ---
 apiVersion: v1
