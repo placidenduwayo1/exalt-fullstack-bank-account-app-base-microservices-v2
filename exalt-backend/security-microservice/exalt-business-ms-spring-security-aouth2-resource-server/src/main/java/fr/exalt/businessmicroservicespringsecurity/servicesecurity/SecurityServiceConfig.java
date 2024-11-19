@@ -92,7 +92,7 @@ public class SecurityServiceConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(httpRequest->httpRequest.requestMatchers(
                         HttpMethod.POST,
-                        "/api-security/users/**","/api-security/roles/**","/api-security/login/**").permitAll())
+                        "/api/security/users/**","/api/security/roles/**","/api/security/login/**").permitAll())
                 .authorizeHttpRequests(httpRequest->httpRequest.anyRequest().authenticated())
                 .oauth2ResourceServer(aouth2->aouth2.jwt(Customizer.withDefaults()));
         return httpSecurity.build();
