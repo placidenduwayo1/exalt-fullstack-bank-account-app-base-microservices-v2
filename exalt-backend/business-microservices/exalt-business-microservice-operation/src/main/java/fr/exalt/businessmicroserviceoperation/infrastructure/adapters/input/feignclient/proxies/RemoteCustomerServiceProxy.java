@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "exalt-business-microservice-customer",
-        path = "/api-customer",
+        path = "/api/customer",
         configuration = RemoteAccountCustomerRequestInterceptor.class,
         fallback = RemoteCustomerServiceProxy.RemoteCustomerServiceFallback.class)
 @Qualifier(value = "customerserviceproxy")

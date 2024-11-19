@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "exalt-business-microservice-bank-account",
-        path = "/api-bank-account",
+        path = "/api/bank-account",
         configuration = RemoteAccountCustomerRequestInterceptor.class,
         fallback = RemoteAccountServiceProxy.RemoteAccountServiceFallback.class)
 @Qualifier(value = "accountserviceproxy")

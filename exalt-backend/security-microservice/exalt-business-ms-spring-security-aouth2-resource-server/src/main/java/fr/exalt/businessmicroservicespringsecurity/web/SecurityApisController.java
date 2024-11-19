@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "api-security")
+@RequestMapping(value = "/api/security")
 @AllArgsConstructor
 public class SecurityApisController {
     private final UserService userService;
