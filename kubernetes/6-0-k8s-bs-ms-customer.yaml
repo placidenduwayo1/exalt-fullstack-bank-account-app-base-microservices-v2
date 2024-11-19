@@ -47,6 +47,7 @@ spec:
               port: customer-api
             initialDelaySeconds: 50
             periodSeconds: 30
+            failureThreshold: 25
           env:
             - name: APPLICATION_NAME6
               valueFrom:
