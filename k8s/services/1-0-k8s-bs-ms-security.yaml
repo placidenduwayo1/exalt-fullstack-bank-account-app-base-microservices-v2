@@ -42,17 +42,17 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: application_name4
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: CONFIGURATION_SERVER_HOST
               valueFrom:
                 configMapKeyRef:
                   key: configuration_server_host
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: CONFIGURATION_SERVER_PORT
               valueFrom:
                 configMapKeyRef:
                   key: configuration_server_port
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: DATABASE_HOST
               valueFrom:
                 secretKeyRef:
@@ -92,7 +92,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: server_port4
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
           livenessProbe:
             tcpSocket:
               port: security-port

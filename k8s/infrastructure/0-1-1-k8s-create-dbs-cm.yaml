@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: exalt-bank-account-app-dbs-cm
+  labels:
+    app: exalt-bank-account-app-dbs-cm
+  namespace: exalt-bank-account-app-ns
+data:
+  initdb.sql: |
+    CREATE DATABASE IF NOT EXISTS security_service_users_db;
+    CREATE DATABASE IF NOT EXISTS bank_account_api_db;
+    CREATE DATABASE IF NOT EXISTS customer_api_db;
+    CREATE DATABASE IF NOT EXISTS operation_api_db;

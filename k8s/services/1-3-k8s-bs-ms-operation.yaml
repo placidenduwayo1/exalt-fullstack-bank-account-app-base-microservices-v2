@@ -42,17 +42,17 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: application_name7
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: CONFIGURATION_SERVER_HOST
               valueFrom:
                 configMapKeyRef:
                   key: configuration_server_host
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: CONFIGURATION_SERVER_PORT
               valueFrom:
                 configMapKeyRef:
                   key: configuration_server_port
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: DATABASE_HOST
               valueFrom:
                 secretKeyRef:
@@ -82,37 +82,37 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: kafka_key_serializer
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_VALUE_SERIALIZER
               valueFrom:
                 configMapKeyRef:
                   key: kafka_value_serializer
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_KEY_DESERIALIZER
               valueFrom:
                 configMapKeyRef:
                   key: kafka_key_deserializer
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_VALUE_DESERIALIZER
               valueFrom:
                 configMapKeyRef:
                   key: kafka_value_deserializer
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_APPLICATION_TOPIC_NAME011
               valueFrom:
                 configMapKeyRef:
                   key: kafka_application_topic_name011
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_APPLICATION_TOPIC_NAME100
               valueFrom:
                 configMapKeyRef:
                   key: kafka_application_topic_name100
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_APPLICATION_TOPIC_RETENTION
               valueFrom:
                 configMapKeyRef:
                   key: kafka_application_topic_retention
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
@@ -122,7 +122,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: server_port7
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
           livenessProbe:
             tcpSocket:
               port: operation-api

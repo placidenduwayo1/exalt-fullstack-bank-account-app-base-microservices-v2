@@ -39,12 +39,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: application_name8
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: SERVER_PORT8
               valueFrom:
                 configMapKeyRef:
                   key: server_port8
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
       restartPolicy: Always
 ---
 apiVersion: v1

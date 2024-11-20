@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: exalt-bank-account-app-cm
+  name: exalt-bank-account-app-env-var-cm
   labels:
-    app: exalt-bank-account-app-cm
+    app: exalt-bank-account-app-env-var-cm
   namespace: exalt-bank-account-app-ns
 data:
   schema_registry_host_key: "schema-registry-service"
