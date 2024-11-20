@@ -21,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api/security")
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class SecurityApisController {
     private final UserService userService;
     private final JwtGeneratorService jwtGeneratorService;
