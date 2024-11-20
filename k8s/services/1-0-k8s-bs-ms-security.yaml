@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exalt-business-ms-spring-security-aouth2-res-server
+  labels:
+    app: exalt-business-ms-spring-security-aouth2-res-server
+  namespace: exalt-bank-account-app-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exalt-business-ms-spring-security-aouth2-res-server
+  template:
+    metadata:
+      name: exalt-business-ms-spring-security-aouth2-res-server
+      labels:
+        app: exalt-business-ms-spring-security-aouth2-res-server
+    spec:
+      serviceAccountName: exalt-bank-account-app-sa
+      initContainers:
+        - name: ms-config-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for exalt-microservices-configuration-service ready; sleep 5; done;'
+        - name: db-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z bank-account-app-apis-dbs 3306; do echo waiting for database to be ready; sleep 5; done;'
+      containers:
+        - name: exalt-business-ms-spring-security-aouth2-res-server
+          image: placidenduwayo1/exalt-business-ms-spring-security-aouth2-res-server:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8102
+              name: security-port
+          env:
+            - name: APPLICATION_NAME4
+              valueFrom:
+                configMapKeyRef:
+                  key: application_name4
+                  name: exalt-bank-account-app-env-var-cm
+            - name: CONFIGURATION_SERVER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: configuration_server_host
+                  name: exalt-bank-account-app-env-var-cm
+            - name: CONFIGURATION_SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: configuration_server_port
+                  name: exalt-bank-account-app-env-var-cm
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: database_host
+                  name: exalt-bank-account-app-credentials
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: database_port
+                  name: exalt-bank-account-app-credentials
+            - name: DATABASE_NAME1
+              valueFrom:
+                secretKeyRef:
+                  key: database_name1
+                  name: exalt-bank-account-app-credentials
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: database_username
+                  name: exalt-bank-account-app-credentials
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: database_password
+                  name: exalt-bank-account-app-credentials
+            - name: PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: public-key.pem
+                  name: exalt-bank-account-app-credentials
+            - name: PRIVATE_KEY
+              valueFrom:
+               secretKeyRef:
+                 key: private-key.pem
+                 name: exalt-bank-account-app-credentials
+            - name: SERVER_PORT4
+              valueFrom:
+                configMapKeyRef:
+                  key: server_port4
+                  name: exalt-bank-account-app-env-var-cm
+          livenessProbe:
+            tcpSocket:
+              port: security-port
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: security-port
+            initialDelaySeconds: 50
+            periodSeconds: 30
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exalt-business-ms-spring-security-aouth2-res-server
+  labels:
+    app: exalt-business-ms-spring-security-aouth2-res-server
+  namespace: exalt-bank-account-app-ns
+spec:
+  selector:
+    app: exalt-business-ms-spring-security-aouth2-res-server
+  ports:
+    - protocol: TCP
+      port: 8102
+      targetPort: security-port
+      name: security-port
+  type: ClusterIP

@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: exalt-bank-account-app-env-var-cm
+  labels:
+    app: exalt-bank-account-app-env-var-cm
+  namespace: exalt-bank-account-app-ns
+data:
+  schema_registry_host_key: "schema-registry-service"
+  kafka_servers_key: "kafka-server1:9092,kafka-server2:9093"
+  kafka_broker_id_1_key: "1"
+  kafka_broker_id_2_key: "2"
+  zookeeper_connect_key: "zookeeper-server:2181"
+  allowing_plain_text_lister_key: "yes"
+  kafka_listeners_security_protocol_map_key: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+  kafka_listeners_1_key: "PLAINTEXT://:9092,PLAINTEXT_HOST://0.0.0.0:19092"
+  kafka_advertised_listeners_1_key: "PLAINTEXT://kafka-server1:9092,PLAINTEXT_HOST://localhost:19092"
+  kafka_listeners_2_key: "PLAINTEXT://:9093,PLAINTEXT_HOST://0.0.0.0:29092"
+  kafka_advertised_listeners_2_key: "PLAINTEXT://kafka-server2:9093,PLAINTEXT_HOST://localhost:29092"
+
+  kafka_cluster_1_key: "kafka-cluster1"
+  kafka_cluster_2_key: "kafka-cluster2"
+  kafka-cluster_metric_port_1_key: "9997"
+  kafka-cluster_metric_port_2_key: "9998"
+  kafka_cluster_schema_registry_key: "schema-registry-service:8081"
+
+  dynamic_config_enabled_key: "true"
+  schema_registry_hostname_key: "schema-registry-service"
+
+  application_name1: "exalt-microservices-configuration-server"
+  application_name3: "exalt-gateway-service-proxy"
+  application_name4: "exalt-business-ms-spring-security-aouth2-res-server"
+  application_name5: "exalt-business-microservice-bank-account"
+  application_name6: "exalt-business-microservice-customer"
+  application_name7: "exalt-business-microservice-operation"
+  application_name8: "exalt-bank-account-app-frontend-angular"
+
+  configuration_server_host: "exalt-microservices-configuration-server"
+  configuration_server_port: "8100"
+
+  kafka_application_topic_name000: "current-bank-account"
+  kafka_application_topic_name001: "saving-bank-account"
+  kafka_application_topic_name010: "customer"
+  kafka_application_topic_name011: "depot-retrait-operation"
+  kafka_application_topic_name100: "transfer-operation"
+  kafka_application_topic_retention: "3600000"
+  kafka_key_deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+  kafka_key_serializer: "org.apache.kafka.common.serialization.StringSerializer"
+  kafka_value_deserializer: "io.confluent.kafka.serializers.KafkaAvroDeserializer"
+  kafka_value_serializer: "io.confluent.kafka.serializers.KafkaAvroSerializer"
+
+  schema_registry_server_host: "schema-registry-service"
+  schema_registry_server_port: "8081"
+  server_address: "localhost"
+  server_port1: "8100"
+  server_port3: "8101"
+  server_port4: "8102"
+  server_port5: "8104"
+  server_port6: "8103"
+  server_port7: "8105"
+  server_port8: "80"

@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exalt-business-microservice-operation
+  labels:
+    app: exalt-business-microservice-operation
+  namespace: exalt-bank-account-app-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exalt-business-microservice-operation
+  template:
+    metadata:
+      name: exalt-business-microservice-operation
+      labels:
+        app: exalt-business-microservice-operation
+    spec:
+      serviceAccountName: exalt-bank-account-app-sa
+      initContainers:
+        - name: ms-config-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z exalt-microservices-configuration-server 8100; do echo waiting for mss-config-service to be ready; sleep 5; done;'
+        - name: database-busybox
+          image: busybox
+          command:
+            - 'sh'
+            - '-c'
+            - 'until nc -z bank-account-app-apis-dbs 3306; do echo waiting for database to be ready; sleep 5; done;'
+      containers:
+        - name: exalt-business-microservice-operation
+          image: placidenduwayo1/exalt-business-microservice-operation:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8105
+              name: operation-api
+          env:
+            - name: APPLICATION_NAME7
+              valueFrom:
+                configMapKeyRef:
+                  key: application_name7
+                  name: exalt-bank-account-app-env-var-cm
+            - name: CONFIGURATION_SERVER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: configuration_server_host
+                  name: exalt-bank-account-app-env-var-cm
+            - name: CONFIGURATION_SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: configuration_server_port
+                  name: exalt-bank-account-app-env-var-cm
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: database_host
+                  name: exalt-bank-account-app-credentials
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: database_port
+                  name: exalt-bank-account-app-credentials
+            - name: DATABASE_NAME4
+              valueFrom:
+                secretKeyRef:
+                  key: database_name4
+                  name: exalt-bank-account-app-credentials
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: database_username
+                  name: exalt-bank-account-app-credentials
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: database_password
+                  name: exalt-bank-account-app-credentials
+            - name: KAFKA_KEY_SERIALIZER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_key_serializer
+                  name: exalt-bank-account-app-env-var-cm
+            - name: KAFKA_VALUE_SERIALIZER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_value_serializer
+                  name: exalt-bank-account-app-env-var-cm
+            - name: KAFKA_KEY_DESERIALIZER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_key_deserializer
+                  name: exalt-bank-account-app-env-var-cm
+            - name: KAFKA_VALUE_DESERIALIZER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_value_deserializer
+                  name: exalt-bank-account-app-env-var-cm
+            - name: KAFKA_APPLICATION_TOPIC_NAME011
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_application_topic_name011
+                  name: exalt-bank-account-app-env-var-cm
+            - name: KAFKA_APPLICATION_TOPIC_NAME100
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_application_topic_name100
+                  name: exalt-bank-account-app-env-var-cm
+            - name: KAFKA_APPLICATION_TOPIC_RETENTION
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_application_topic_retention
+                  name: exalt-bank-account-app-env-var-cm
+            - name: PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: public-key.pem
+                  name: exalt-bank-account-app-credentials
+            - name: SERVER_PORT7
+              valueFrom:
+                configMapKeyRef:
+                  key: server_port7
+                  name: exalt-bank-account-app-env-var-cm
+          livenessProbe:
+            tcpSocket:
+              port: operation-api
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: operation-api
+            initialDelaySeconds: 50
+            periodSeconds: 30
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exalt-business-microservice-operation
+  labels:
+    app: exalt-business-microservice-operation
+  namespace: exalt-bank-account-app-ns
+spec:
+  selector:
+    app: exalt-business-microservice-operation
+  ports:
+    - protocol: TCP
+      port: 8105
+      targetPort: operation-api
+      name: operation-port
+  type: ClusterIP
+      

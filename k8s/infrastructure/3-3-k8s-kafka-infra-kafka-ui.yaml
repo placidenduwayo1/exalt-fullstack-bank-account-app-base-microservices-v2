@@ -42,43 +42,43 @@ spec:
             - name: KAFKA_CLUSTERS_0_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
                   key: kafka_cluster_1_key
             - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
               valueFrom:
                 configMapKeyRef:
                   key: kafka_servers_key
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_CLUSTERS_0_METRICS_PORT
               valueFrom:
                 configMapKeyRef:
                   key: kafka-cluster_metric_port_1_key
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_CLUSTERS_0_SCHEMAREGISTRY
               valueFrom:
                 configMapKeyRef:
                   key: kafka_cluster_schema_registry_key
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_CLUSTERS_1_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
                   key: kafka_cluster_2_key
             - name: KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS
               valueFrom:
                 configMapKeyRef:
                   key: kafka_servers_key
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_CLUSTERS_1_METRICS_PORT
               valueFrom:
                 configMapKeyRef:
                   key: kafka-cluster_metric_port_2_key
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
             - name: KAFKA_CLUSTERS_1_SCHEMAREGISTRY
               valueFrom:
                 configMapKeyRef:
                   key: kafka_cluster_schema_registry_key
-                  name: exalt-bank-account-app-cm
+                  name: exalt-bank-account-app-env-var-cm
       restartPolicy: Always
 ---
 apiVersion: v1
