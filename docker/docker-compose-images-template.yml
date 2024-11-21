@@ -1,5 +1,5 @@
 services:
-
+## ----------------  infrastructure ----------------
   bank-account-app-apis-dbs:
     image: mysql:8.4.1
     container_name: ${DATABASE_HOST}
@@ -19,7 +19,6 @@ services:
     networks:
       - bank-account-apis
 
-  ##-------------- kafka infrastructure -------------------
   zookeeper-server:
     image: zookeeper:3.4.9
     container_name: zookeeper-server
@@ -128,7 +127,6 @@ services:
       - bank-account-apis
     restart: no
 
-#  ---------------- transverse microservices---------------------
   exalt-microservices-configuration-server:
     image: placidenduwayo1/${APPLICATION_NAME1}:1.0.0
     container_name: ${APPLICATION_NAME1}
@@ -208,7 +206,19 @@ services:
       GATEWAY_ROUTE_URI4: "${GATEWAY_ROUTE_URI4}"
       SERVER_PORT3: "${SERVER_PORT3}"
 
-# ------------------------ spring security microservice-------------------
+  keycloak-authentication-provider:
+    container_name: keycloak-authentication-provider
+    image: quay.io/keycloak/keycloak:26.0.5
+    ports:
+      - 9091:8080
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    networks:
+      - bank-account-apis
+    command:
+      - "start-dev"
+## ------------------------ business services -------------------
   exalt-business-ms-spring-security-aouth2-res-server:
     image: placidenduwayo1/${APPLICATION_NAME4}:1.0.0
     container_name: ${APPLICATION_NAME4}
