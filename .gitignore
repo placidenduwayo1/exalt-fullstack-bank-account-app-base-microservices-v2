@@ -1,5 +1,4 @@
 .idea
 docker/.env
-**/dist
 **/node_modules
 docker/data
