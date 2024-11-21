@@ -1,0 +1,107 @@
+# persistence volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: exalt-bank-account-app-pv
+  labels:
+    app: exalt-bank-account-app-pv
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/mysql
+---
+# persistence volume claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: exalt-bank-account-app-pvc
+  labels:
+    app: exalt-bank-account-app-pvc
+  namespace: exalt-bank-account-app-ns
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-account-app-apis-dbs
+  labels:
+    app: bank-account-app-apis-dbs
+  namespace: exalt-bank-account-app-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bank-account-app-apis-dbs
+  template:
+    metadata:
+      name: bank-account-app-apis-dbs
+      labels:
+        app: bank-account-app-apis-dbs
+    spec:
+      serviceAccountName: exalt-bank-account-app-sa
+      containers:
+        - name: bank-account-app-apis-dbs
+          image: mysql:8.4.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              name: db-host-port
+          readinessProbe:
+            tcpSocket:
+              port: db-host-port
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          livenessProbe:
+            tcpSocket:
+              port: db-host-port
+            initialDelaySeconds: 50
+            periodSeconds: 30
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: bank-account-app-db-pwd
+                  name: exalt-bank-account-app-credentials
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: bank-account-app-volume
+            - mountPath: /docker-entrypoint-initdb.d
+              name: exalt-bank-account-app-dbs-cm # the name of configMap for db creation scripts
+      volumes:
+        - name: bank-account-app-volume
+          persistentVolumeClaim:
+            claimName: exalt-bank-account-app-pvc
+        - name: exalt-bank-account-app-dbs-cm
+          configMap:
+            name: exalt-bank-account-app-dbs-cm
+      restartPolicy: Always
+
+---
+# database service
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-account-app-apis-dbs
+  labels:
+    app: bank-account-app-apis-dbs
+  namespace: exalt-bank-account-app-ns
+spec:
+  selector:
+    app: bank-account-app-apis-dbs
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: db-host-port
+      name: db-host-port-svc
+  type: ClusterIP
