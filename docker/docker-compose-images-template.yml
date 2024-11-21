@@ -205,7 +205,6 @@ services:
       GATEWAY_ROUTE_ID4: "${GATEWAY_ROUTE_ID4}"
       GATEWAY_ROUTE_URI4: "${GATEWAY_ROUTE_URI4}"
       SERVER_PORT3: "${SERVER_PORT3}"
-
 ## ------------------------ business services -------------------
   exalt-business-ms-spring-security-aouth2-res-server:
     image: placidenduwayo1/${APPLICATION_NAME4}:1.0.0
