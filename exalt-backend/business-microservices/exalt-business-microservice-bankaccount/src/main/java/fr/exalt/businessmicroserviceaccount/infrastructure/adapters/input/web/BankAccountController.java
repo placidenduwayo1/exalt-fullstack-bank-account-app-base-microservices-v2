@@ -16,6 +16,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(value = "/api/bank-account")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class BankAccountController {
     //input adapter
     private final InputBankAccountService inputBankAccountService;
